@@ -1,86 +1,86 @@
-# 🛢️ سیستم نرم‌افزاری مدیریت آسیب‌های سازند (Formation Damage Detection System - FCDD)
+# 🛢️ Formation Damage Detection System (FCDD)
 
 ---
 
-## 🧩 معرفی کلی
+## 🧩 Overview
 
-**FCDD (Formation Condition & Damage Detection)** یک سیستم پیشرفته‌ نرم‌افزاری است که به صورت یکپارچه به **شناسایی، پیش‌بینی و تحلیل آسیب‌های سازند** در میادین نفت و گاز می‌پردازد. این سامانه برای افزایش کارایی عملیات حفاری و بهره‌برداری و کاهش هزینه‌های ناشی از آسیب‌های ناشناخته در سازند طراحی شده است.
-
----
-
-## 🎯 اهداف کلان سیستم
-
-- 📌 شناسایی خودکار انواع آسیب‌های سازند در فازهای مختلف حفاری، تکمیل و تولید  
-- 📌 کاهش عدم قطعیت در تصمیم‌گیری‌های فنی مهندسان بهره‌برداری  
-- 📌 ارائه تحلیل‌های چندبعدی از داده‌های عملیاتی و زمین‌شناسی  
-- 📌 ارائه هشدارهای بلادرنگ جهت پیشگیری از بروز آسیب‌های جدی  
-- 📌 پیشنهاد راهکارهای اصلاحی و پیشگیرانه با استفاده از الگوریتم‌های هوشمند
+**FCDD (Formation Condition & Damage Detection)** is an advanced integrated software system designed to **identify, predict, and analyze formation damage** in oil and gas fields. The system aims to enhance drilling and production efficiency while reducing costs associated with undetected formation damage.
 
 ---
 
-## 🔬 محدوده عملکرد
+## 🎯 System Objectives
 
-### انواع آسیب‌های تحت پوشش:
-
-| نوع آسیب | توضیح |
-|----------|-------|
-| Clay & Iron Control | آسیب‌های ناشی از فعل‌وانفعالات شیمیایی با رس و آهن |
-| Drilling-Induced Damage | آسیب‌های فشاری و مکانیکی حین حفاری |
-| Fluid Loss | تلفات سیالات حفاری یا تحریک‌کننده |
-| Scale / Sludge Incompatibility | ایجاد رسوبات معدنی یا آلی |
-| Near-Wellbore Emulsions | تشکیل امولسیون‌ها در اطراف چاه |
-| Rock/Fluid Interaction | ناسازگاری سنگ و سیال |
-| Completion Damage | کاهش اتصال بین سازند و تکمیل |
-| Stress/Corrosion Cracking | ترک‌خوردگی ناشی از تنش یا خوردگی |
-| Surface Filtration | اختلالات فیلتراسیون سطحی سیالات |
-| Ultra-Clean Fluids Control | مدیریت سیالات با خلوص بالا در فرایند تحریک |
+- 📌 Automatically detect various types of formation damage during drilling, completion, and production phases  
+- 📌 Reduce uncertainty in operational and technical decision-making  
+- 📌 Provide multidimensional analysis of geological and operational data  
+- 📌 Deliver real-time alerts to prevent serious damage  
+- 📌 Recommend preventive and corrective actions using intelligent algorithms
 
 ---
 
-## 🧠 فناوری‌های مورد استفاده
+## 🔬 Scope of Operation
 
-| ماژول | فناوری / زبان | علت انتخاب |
-|-------|----------------|--------------|
-| داده‌کاوی | Python (Pandas, NumPy) | پردازش سریع داده‌های سری زمانی |
-| یادگیری ماشین | XGBoost, LightGBM, TensorFlow | طبقه‌بندی و پیش‌بینی چندکلاسه |
-| شبیه‌سازی | OpenFOAM (C++), FEniCS (Python) | شبیه‌سازی فیزیکی فرآیندها |
-| رابط کاربری | React.js, D3.js | داشبوردهای تعاملی و تصویری |
-| سرور | FastAPI (Python) | RESTful API سریع و سبک |
-| ذخیره‌سازی | PostgreSQL + MongoDB | ساختار ترکیبی داده‌های ساختاریافته و نیمه‌ساخت‌یافته |
-| مانیتورینگ بلادرنگ | Kafka + Grafana | انتقال سریع و نمایش آنی داده‌ها |
+### Covered Damage Types:
 
----
-
-## 🔍 الگوریتم‌های یادگیری ماشین پیاده‌سازی‌شده
-
-- 🎯 **XGBoost / LightGBM:** برای طبقه‌بندی نوع آسیب سازند بر اساس ویژگی‌های حفاری و سیال  
-- 🔁 **LSTM / GRU:** برای مدل‌سازی رفتار زمانی تلفات سیال و پیش‌بینی نقاط بحرانی  
-- 📊 **KMeans / DBSCAN:** برای خوشه‌بندی داده‌ها و کشف آسیب‌های پنهان  
-- 🧬 **Autoencoder / Isolation Forest:** تشخیص ناهنجاری‌های داده‌ای و کشف رخدادهای غیرمعمول  
-- 🧪 **GAN (Generative Adversarial Networks):** تولید داده مصنوعی برای آموزش مدل‌ها و تحلیل سناریوهای فرضی
+| Damage Type | Description |
+|-------------|-------------|
+| Clay & Iron Control | Chemical interactions with clay and iron |
+| Drilling-Induced Damage | Mechanical and pressure-related damage during drilling |
+| Fluid Loss | Loss of drilling or stimulation fluids |
+| Scale / Sludge Incompatibility | Formation of inorganic or organic deposits |
+| Near-Wellbore Emulsions | Emulsion formation near the wellbore |
+| Rock/Fluid Interaction | Incompatibility between formation rock and fluids |
+| Completion Damage | Loss of connectivity between formation and completion |
+| Stress/Corrosion Cracking | Cracks caused by stress or corrosion |
+| Surface Filtration | Surface fluid filtration disruptions |
+| Ultra-Clean Fluids Control | Management of high-purity fluids during stimulation |
 
 ---
 
-## 🧪 تولید داده مصنوعی
+## 🧠 Technologies Used
 
-برای توسعه اولیه، از یک اسکریپت Python جهت تولید داده‌های مصنوعی استفاده شده است. این اسکریپت داده‌هایی شامل پارامترهای حفاری، خواص سیالات، شرایط فشاری و دمایی، و خروجی نوع آسیب تولید می‌کند.
-
-📄 فایل اسکریپت: `generate_synthetic_data.py`  
-📁 فایل خروجی: `synthetic_formation_damage_data.csv`  
-📈 تعداد رکورد: 15.552.000
-
----
-
-## 📊 داشبورد پایش و تحلیل
-
-- داشبورد وب‌محور با React.js و D3.js  
-- امکان فیلتر بر اساس موقعیت، عمق، تاریخچه چاه  
-- نمودارهای سری زمانی تلفات، فشار، دما و پیش‌بینی آسیب  
-- هشدارهای آنی برای ناهنجاری‌ها یا بروز آسیب جدی
+| Module | Technology / Language | Reason |
+|--------|------------------------|--------|
+| Data Mining | Python (Pandas, NumPy) | Fast processing of time-series data |
+| Machine Learning | XGBoost, LightGBM, TensorFlow | Multiclass classification and prediction |
+| Simulation | OpenFOAM (C++), FEniCS (Python) | Physical process simulations |
+| UI | React.js, D3.js | Interactive and visual dashboards |
+| Backend | FastAPI (Python) | Fast, lightweight RESTful API |
+| Storage | PostgreSQL + MongoDB | Hybrid structured and semi-structured data |
+| Real-Time Monitoring | Kafka + Grafana | High-speed data transmission and live visualization |
 
 ---
 
-## 🧰 ساختار پروژه
+## 🔍 Implemented Machine Learning Algorithms
+
+- 🎯 **XGBoost / LightGBM**: For damage type classification using drilling and fluid features  
+- 🔁 **LSTM / GRU**: For time-series modeling of fluid loss and critical event prediction  
+- 📊 **KMeans / DBSCAN**: For clustering and discovery of hidden damage patterns  
+- 🧬 **Autoencoder / Isolation Forest**: For anomaly detection and outlier discovery  
+- 🧪 **GAN (Generative Adversarial Networks)**: For synthetic data generation and scenario modeling
+
+---
+
+## 🧪 Synthetic Data Generation
+
+To support initial development, a Python script is used to generate synthetic data, including drilling parameters, fluid properties, pressure and temperature conditions, and damage type labels.
+
+📄 Script: `generate_synthetic_data.py`  
+📁 Output File: `synthetic_formation_damage_data.csv`  
+📈 Record Count: 15,552,000
+
+---
+
+## 📊 Monitoring & Analysis Dashboard
+
+- Web-based dashboard using React.js and D3.js  
+- Filters by location, depth, and well history  
+- Time-series charts for losses, pressure, temperature, and damage predictions  
+- Real-time alerts for anomalies and critical damage events
+
+---
+
+## 🧰 Project Structure
 
 ```
 formation-damage-system/
@@ -104,7 +104,7 @@ formation-damage-system/
 
 ---
 
-## 🚀 راه‌اندازی سریع
+## 🚀 Quick Start
 
 ```bash
 git clone https://github.com/your-org/formation-damage-system.git
@@ -116,57 +116,55 @@ python predict_damage_type.py
 
 ---
 
-## 💻 پیش‌نیازهای سخت‌افزاری توصیه‌شده
+## 💻 Recommended Hardware
 
-| بخش | مشخصات |
-|------|---------|
-| پردازنده | Intel Xeon یا AMD EPYC با حداقل ۱۶ هسته |
-| رم | حداقل ۶۴ گیگابایت |
-| GPU | NVIDIA RTX A6000 یا A100 با حداقل ۱۶GB VRAM |
-| فضای ذخیره‌سازی | ۱ ترابایت SSD + HDD جهت آرشیو |
-| محیط ابری (اختیاری) | AWS EC2 (GPU Enabled) یا Google Cloud TPU |
-
----
-
-## 📁 فایل‌های کلیدی
-
-| فایل | شرح |
-|------|------|
-| `generate_synthetic_data.py` | تولید داده مصنوعی با توزیع‌های کنترل‌شده |
-| `predict_damage_type.py` | پیش‌بینی نوع آسیب سازند با استفاده از مدل XGBoost |
-| `dashboard/frontend/` | رابط کاربری تعاملی برای پایش آسیب‌ها |
-| `simulation/fem_model.py` | مدل المان محدود جهت شبیه‌سازی پویای آسیب |
+| Component | Specs |
+|-----------|-------|
+| CPU | Intel Xeon or AMD EPYC, minimum 16 cores |
+| RAM | Minimum 64 GB |
+| GPU | NVIDIA RTX A6000 or A100, minimum 16 GB VRAM |
+| Storage | 1 TB SSD + HDD for archiving |
+| Cloud (Optional) | AWS EC2 (GPU Enabled) or Google Cloud TPU |
 
 ---
 
-## 📌 چشم‌انداز توسعه آتی
+## 📁 Key Files
 
-- توسعه ماژول پیش‌بینی به صورت بلادرنگ با Kafka  
-- پیاده‌سازی ماژول خودیادگیر با آپدیت مستمر مدل‌ها  
-- اتصال مستقیم به پایگاه‌داده چاه‌ها (SCADA، PI System)  
-- ایجاد نسخه Cloud-Native قابل استقرار در Kubernetes  
-- توسعه مدل‌های علت‌یابی خودکار آسیب (Root Cause Analysis)
-
----
-
-## 🤝 مشارکت در پروژه
-
-- ارسال Pull Request برای بهبود مدل‌ها یا داشبورد  
-- گزارش مشکلات و پیشنهادات در قسمت Issues  
-- مشارکت در طراحی ماژول‌های شبیه‌سازی، گسترش ویژگی‌ها و ارزیابی میدانی
+| File | Description |
+|------|-------------|
+| `generate_synthetic_data.py` | Controlled-distribution synthetic data generation |
+| `predict_damage_type.py` | Formation damage type prediction using XGBoost |
+| `dashboard/frontend/` | Interactive damage monitoring UI |
+| `simulation/fem_model.py` | Finite element simulation model for damage processes |
 
 ---
 
-## 🧾 مجوز استفاده
+## 📌 Future Roadmap
 
-> این پروژه تحت مجوز **MIT** منتشر شده است. استفاده آزاد، توسعه، تجاری‌سازی و بهره‌برداری از آن مجاز است با ذکر منبع.
+- Real-time prediction module with Kafka integration  
+- Self-learning models with continuous updates  
+- Direct integration with well databases (SCADA, PI System)  
+- Cloud-native deployment (Kubernetes-ready)  
+- Automated root cause analysis module
+
+---
+
+## 🤝 Contributions
+
+- Submit Pull Requests to improve models or dashboards  
+- Report bugs or suggest enhancements via Issues  
+- Contribute to simulation modules, feature extensions, and field evaluations
 
 ---
 
-## 👨‍🔬 تهیه و توسعه
+## 🧾 License
 
-- واحد پژوهش و توسعه دیجیتال در صنایع نفت و گاز  
-- تیم تخصصی تحلیل داده‌های مخزن، حفاری و بهره‌برداری  
-- همکاری با دانشگاه‌ها و مراکز پژوهشی حوزه زمین‌شناسی و مهندسی نفت
+> This project is released under the **MIT License**. Free to use, develop, commercialize, and distribute with attribution.
 
 ---
+
+## 👨‍🔬 Developed By
+
+- Digital R&D unit in oil and gas industry  
+- Reservoir, drilling, and production data analytics team  
+- Collaboration with universities and geological research centers
