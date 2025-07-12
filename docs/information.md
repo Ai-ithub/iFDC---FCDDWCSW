@@ -1,2 +1,1 @@
-this is about your work report as md format 
-like thid 12-09-1404-faridkaki.md
+سلام امروز چون دیر برام ارسال شد فایل ها یعنی ساعت 9 بود  و من نمیتونستم فقط تونستم تا 40 دقیقه اموزش گیت هاب پیش برم...
