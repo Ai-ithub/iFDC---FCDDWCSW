@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 
-# تابع افزودن داده گمشده و نویز گوسی
-# این تابع جنریک است و فقط روی ستون‌های عددی اعمال می‌شود
+# Function for adding missing data and Gaussian noise
+# This is a generic function and only applies to numerical columns
 
 def add_missing_and_noise(df, missing_percent=5.0, noise_mean=0.0, noise_std=0.1):
     df_modified = df.copy()
@@ -29,23 +29,23 @@ def add_missing_and_noise(df, missing_percent=5.0, noise_mean=0.0, noise_std=0.1
     return df_modified
 
 
-# پوشه حاوی فایل‌های ورودی پارکت
+# Folder containing the input Parquet files
 input_dir = Path(os.getenv('INPUT_DIR', 'well_outputs')) 
 output_dir = Path(os.getenv('OUTPUT_DIR', 'modified_outputs_chunked'))
 output_dir.mkdir(parents=True, exist_ok=True)
 
 
 
-# پارامترهای پردازش
+# Processing parameters
 missing_percent = 5.0
 noise_mean = 0.0
 noise_std = 0.1
 
-# پیدا کردن همه فایل‌های پارکت در مسیر ورودی
+# Finding all Parquet files in the input path
 files = sorted([f for f in input_dir.glob("*.parquet")])
 print(f"Found {len(files)} parquet files in '{input_dir}'.")
 
-# پردازش هر فایل پارکت به صورت چانک‌به‌چانک
+# Processing each Parquet file chunk by chunk
 for file_i, file_path in enumerate(files):
     print(f"Processing file {file_i + 1}/{len(files)}: {file_path.name}")
     pf = pq.ParquetFile(file_path)
@@ -56,7 +56,7 @@ for file_i, file_path in enumerate(files):
         table = pf.read_row_group(rg)
         df_chunk = table.to_pandas()
 
-        # اعمال تغییرات روی هر چانک
+        # Applying transformations to each chunk
         df_modified = add_missing_and_noise(
             df_chunk,
             missing_percent=missing_percent,
@@ -64,7 +64,7 @@ for file_i, file_path in enumerate(files):
             noise_std=noise_std
         )
 
-        # ذخیره خروجی به صورت فشرده
+        # Saving the output in compressed format
         output_file = output_dir / f"modified_{file_path.stem}_rg{rg + 1}.parquet"
         df_modified.to_parquet(output_file, compression='snappy', index=False)
 
