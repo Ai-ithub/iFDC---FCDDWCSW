@@ -5,11 +5,15 @@ import os
 import pyarrow.parquet as pq
 import pyarrow as pa
 
+
+# Set random seed for reproducibility
 np.random.seed(42)
 
-# پیکربندی
-records_per_well = 15_552_000
-chunk_size = 1_000_000  
+# Configuration for data generation
+records_per_well = 15_552_000  # Total records to generate per well
+chunk_size = 1_000_000         # Number of records to process in each chunk
+
+# List of well IDs with their longitude and latitude
 wells_info = [
     (40100050, -94.86, 32.26),
     (40131881, -94.82, 32.26),
@@ -23,8 +27,9 @@ wells_info = [
     (18387931, -94.86, 32.45)
 ]
 
-start_date = datetime(2023, 1, 1)
+start_date = datetime(2023, 1, 1)  # Base start date for DateTime generation
 
+# Domain-specific categories and parameters
 formations = ['Shale', 'Limestone', 'Sandstone']
 clay_types = ['Kaolinite', 'Illite', 'Montmorillonite']
 completion_types = ['Cased', 'Open Hole', 'Liner']
@@ -33,10 +38,12 @@ mud_types = ['Water-based', 'Oil-based', 'Synthetic']
 fracture_prob = {'Shale': 0.2, 'Limestone': 0.6, 'Sandstone': 0.4}
 temp_base = {'Shale': 70, 'Limestone': 90, 'Sandstone': 85}
 perm_base = {'Shale': 5, 'Limestone': 150, 'Sandstone': 80}
+porosity_base = {'Shale': 8, 'Limestone': 16, 'Sandstone': 12}  # Example porosity base values in percentage
 clay_base = {'Kaolinite': 15, 'Illite': 25, 'Montmorillonite': 40}
 density_perforation_map = {'Cased': 30, 'Open Hole': 10, 'Liner': 20}
 wob_map = {'Drilling': 5000, 'Completion': 2000, 'Production': 0}
 
+# Determine operational phase based on well age in days
 def phase_operation(day):
     if day < 100:
         return 'Drilling'
@@ -44,6 +51,7 @@ def phase_operation(day):
         return 'Completion'
     return 'Production'
 
+# Calculate probability score of damage based on inputs
 def calc_damage(prob_base, clay, loss_fluid, fractures, api_loss):
     score = prob_base
     if clay > 30:
@@ -56,29 +64,31 @@ def calc_damage(prob_base, clay, loss_fluid, fractures, api_loss):
         score += 0.2
     return min(score, 0.95)
 
+# Determine damage type based on domain-driven conditions
 def determine_damage_type(row):
     if row['Clay_Content_Percent'] > 35 and row['Clay_Mineralogy_Type'] == "Montmorillonite":
         return "Clay & Iron Control"
-    if row['Formation_Type'] == "Shale" and row['Fluid_Loss_API'] > 0.8:  # قبلاً 1.2 بود
+    if row['Formation_Type'] == "Shale" and row['Fluid_Loss_API'] > 0.8:  # previous threshhold was 1.2
         return "Drilling-Induced Damage"
-    if row['Fluid_Loss_API'] > 1.0 and row['Mud_Type'] == "Water-based":  # قبلاً 1.5 بود
+    if row['Fluid_Loss_API'] > 1.0 and row['Mud_Type'] == "Water-based":  # previous threshhold was 1.5
         return "Fluid Loss"
-    if row['Chloride_Content'] > 500 and row['Solid_Content'] > 10:  # قبلاً 600 و 12 بود
+    if row['Chloride_Content'] > 500 and row['Solid_Content'] > 10:  # previous threshhols were 600 and 12
         return "Scale / Sludge Incompatibility"
-    if row['Completion_Type'] == "Open Hole" and row['Mud_pH'] < 7.0:  # قبلاً 6.5 بود
+    if row['Completion_Type'] == "Open Hole" and row['Mud_pH'] < 7.0:  # previous threshhold was 6.5
         return "Near-Wellbore Emulsions"
-    if row['Formation_Permeability'] < 30 and row['Reservoir_Temperature'] > 85:  # قبلاً <20 و >90
+    if row['Formation_Permeability'] < 30 and row['Reservoir_Temperature'] > 85:  # previous threshholds were 90 and 20
         return "Rock/Fluid Interaction"
-    if row['Completion_Type'] == "Cased" and row['Overbalance'] > 100:  # قبلاً >120
+    if row['Completion_Type'] == "Cased" and row['Overbalance'] > 100:  # previous threshhold was 120
         return "Completion Damage"
-    if row['Reservoir_Temperature'] > 95 and row['Mud_Weight_In'] > 9.5:  # قبلاً >100 و >10
+    if row['Reservoir_Temperature'] > 95 and row['Mud_Weight_In'] > 9.5:  # previous threshholds were 100 and 10
         return "Stress/Corrosion Cracking"
-    if row['Viscosity'] > 18 and row['Mud_Type'] == "Oil-based":  # قبلاً >20
+    if row['Viscosity'] > 18 and row['Mud_Type'] == "Oil-based":  # previous threshhold was 20
         return "Surface Filtration"
-    if row['Viscosity'] < 12 and row['Mud_Type'] == "Synthetic":  # قبلاً <10
+    if row['Viscosity'] < 12 and row['Mud_Type'] == "Synthetic":  # previous threshhold was 20
         return "Ultra-Clean Fluids Control"
     return "Generic Damage"
 
+# Generate a synthetic dataset for one well
 def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=0):
     ID_Well_API = np.array([well_id]*records)
     LONG = long_val + np.random.randn(records)*0.001
@@ -87,7 +97,8 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
     ID_Record = np.arange(start_record_id, start_record_id + records)
     DateTime = np.array([start_date + timedelta(seconds=i) for i in range(records)])
     Days_Age_Well = ((DateTime - start_date).astype('timedelta64[s]').astype(int) // 86400)
-    
+
+    # Categorical and numerical synthetic features
     Phase_Operation = np.array([phase_operation(d) for d in Days_Age_Well])
     Type_Formation = np.random.choice(formations, size=records, p=[0.4, 0.3, 0.3])
     Type_Mineralogy_Clay = np.random.choice(clay_types, size=records)
@@ -95,14 +106,15 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
     
     Temperature_Reservoir = np.array([temp_base[t] + np.random.randn()*2 for t in Type_Formation])
     Permeability_Formation = np.array([perm_base[t] + np.random.randn()*5 for t in Type_Formation])
+    Porosity_Formation = np.array([porosity_base[t] + np.random.randn()*2 for t in Type_Formation])
     Percent_Content_Clay = np.array([clay_base[t] + np.random.randn()*3 for t in Type_Mineralogy_Clay])
     
     Type_Completion = np.random.choice(completion_types, size=records)
     Density_Perforation = np.array([density_perforation_map[t] + np.random.randn()*2 for t in Type_Completion])
-    
+
+    # Drilling dynamics
     Depth_Measured = Days_Age_Well * 5 + np.random.randn(records)*10 + 500
     Depth_Bit = Depth_Measured - (np.random.rand(records)*10)
-    
     WOB = np.array([wob_map[phase] + np.random.randn()*300 for phase in Phase_Operation])
     RPM = np.array([120 + np.random.randn()*10 if phase == 'Drilling' else 50 + np.random.randn()*5 for phase in Phase_Operation])
     ROP = np.array([10 + 5*np.random.rand() if phase == 'Drilling' else 0 for phase in Phase_Operation])
@@ -111,7 +123,8 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
     Pressure_Annulus = Pressure_Standpipe - 200 + np.random.randn(records)*50
     Overbalance = 100 + np.random.randn(records)*20
     Pressure_Reservoir = 5000 + np.random.randn(records)*300
-    
+
+    # Mud parameters
     Type_Mud = np.random.choice(mud_types, size=records, p=[0.6, 0.3, 0.1])
     In_Rate_Flow_Mud = 100 + 10*np.random.randn(records)
     In_Weight_Mud = 9 + 0.5*np.random.randn(records)
@@ -126,10 +139,13 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
     API_Loss_Fluid = np.clip(0.5 + 0.1*np.random.randn(records), 0, None)
     Out_Weight_Mud = In_Weight_Mud * (0.95 + 0.05*np.random.rand(records))
     num_injected = int(records * 0.002)
+    
+    # Inject controlled damage cases (if needed)
     if num_injected > 0:
         Temperature_Reservoir[:num_injected] = np.random.uniform(86, 100, size=num_injected)
         Permeability_Formation[:num_injected] = np.random.uniform(5, 29, size=num_injected)
-    
+
+    # Determine damage presence and type
     Active_Damage = []
     Type_Damage = []
 
@@ -157,7 +173,8 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
             Type_Damage.append(determine_damage_type(row))
         else:
             Type_Damage.append("No Damage")
-    
+
+    # Create final DataFrame
     df = pd.DataFrame({
         'Record_ID': ID_Record,
         'API_Well_ID': ID_Well_API,
@@ -171,6 +188,7 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
         'Fractures_Presence': Fractures_of_Presence,
         'Reservoir_Temperature': Temperature_Reservoir,
         'Formation_Permeability': Permeability_Formation,
+        'Porosity_Formation': Porosity_Formation,
         'Clay_Content_Percent': Percent_Content_Clay,
         'Completion_Type': Type_Completion,
         'Density_Perforation': Density_Perforation,
@@ -201,9 +219,12 @@ def generate_data_for_well(well_id, long_val, lat_val, records, start_record_id=
         'Type_Damage': Type_Damage
     })
     return df
+
+# Main saving loop for all wells
 output_dir = 'well_outputs'
 os.makedirs(output_dir, exist_ok=True)
 
+# generate and save each chunk in Parquet format
 for well_id, long_val, lat_val in wells_info:
     print(f"Generating data for well {well_id} ...")
     num_chunks = records_per_well // chunk_size
