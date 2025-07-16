@@ -1,6 +1,17 @@
-# Datasets
+# 📁 Datasets
 
-این پوشه مخصوص نگهداری مجموعه داده‌های مورد استفاده در این پروژه است.  
-لطفاً فایل‌های مربوط به دیتاست‌ها را در اینجا قرار دهید تا دسترسی و سازماندهی داده‌ها آسان‌تر شود.
+This folder is dedicated to storing the datasets used in this project.
+Please place all dataset-related files here to ensure easy access and organized data management.
 
-> **نکته:** لطفاً از قرار دادن فایل‌های بسیار حجیم در ریپازیتوری خودداری کنید و در صورت نیاز، لینک دسترسی به دیتاست‌ها یا کد ساخت آن‌ها را در اینجا اضافه کنید.
+> 💡 Note: Please avoid uploading large files directly to the repository. If necessary, include a download link to the dataset (e.g., from Google Drive, Kaggle, Zenodo, etc.) or add a script that builds or fetches the dataset..
+
+---
+
+# Recommended Folder Structure:
+
+```
+Datasets/
+├── raw/                  # Original/raw datasets
+├── processed/            # Cleaned or preprocessed datasets
+└── README.md             # Documentation and dataset descriptions
+```
