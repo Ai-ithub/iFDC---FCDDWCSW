@@ -26,11 +26,13 @@ non_numerical_cols = [
     "Record_ID", "API_Well_ID", "DateTime", "Type_Damage", "Phase_Operation",
     "Formation_Type", "Clay_Mineralogy_Type", "Completion_Type", "Mud_Type", "Active_Damage"
 ]
-X = df.drop(columns=non_numerical_cols)
+
+# optional, may be it's better to just drop `Active_Damage` and `Type_Damage`
+X = df.drop(columns=non_numerical_cols) 
 
 # Step 3: Encode label (Type_Damage) to integers
 label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(df["Type_Damage"])  # You can also get class names using label_encoder.classes_
+y = label_encoder.fit_transform(df["Active_Damage"])  # You can also get class names using label_encoder.classes_
 
 # Step 4: Scale features
 scaler = StandardScaler()
