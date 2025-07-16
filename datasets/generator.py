@@ -5,6 +5,7 @@ import pyarrow.parquet as pq
 import os
 from datetime import datetime, timedelta
 from collections import defaultdict
+from tqdm.auto import tqdm
 
 # Configuration
 np.random.seed(42)
