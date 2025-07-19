@@ -287,7 +287,7 @@ def get_formation_thickness(formation, current_depth):
     min_thick, max_thick = base_thickness_ranges.get(formation, (10, 50))
     return np.random.uniform(min_thick*depth_factor, max_thick*depth_factor)
 
-def generate_formation_layers(total_depth, has_horizontal=False, vertical_ratio=0.75, tangent_ratio=0.15):
+def generate_formation_layers(total_depth, has_horizontal, vertical_ratio=0.75, tangent_ratio=0.15):
 
     layers = []
     current_depth = 0
@@ -865,8 +865,8 @@ schema = pa.schema([
 ])
 
 def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time,
-                           start_depth=0.0, max_depth=3000, vertical_ratio=0.75,
-                           tangent_ratio=0.15, has_horizontal=False):
+                           has_horizontal, start_depth=0.0, max_depth=3000,
+                           vertical_ratio=0.75, tangent_ratio=0.15):
 
     if has_horizontal:
         vertical_depth = max_depth * vertical_ratio
@@ -876,13 +876,10 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
         vertical_depth = max_depth
         tangent_depth = max_depth  # Never reached
 
-    horizontal_depth = max_depth
-
     # Horizontal section tracking
     in_horizontal = False
     reservoir_formation = None
     reservoir_layer = None
-    horizontal_start_depth = None
 
     # Return empty dataframe if we've already reached max depth
     if start_depth >= max_depth:
@@ -974,9 +971,16 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
 
         depth_inc = effective_rop / 3600  # ROP in m/hr to m/sec
 
-        # Adjust depth increment if it would exceed max depth
-        if current_depth + depth_inc > max_depth:
+        # Ensure minimum ROP to prevent stalling
+        min_rop = 0.1  # Minimum 0.1 m/hr (about 10cm/hour)
+        effective_rop = max(min_rop, base_rop * wob_factor * pressure_factor * equipment_efficiency)
+        
+        # If within last 10m, drill exactly to bottom
+        if (max_depth - current_depth) <= 10:
             depth_inc = max_depth - current_depth
+            effective_rop = depth_inc * 3600  # Adjust ROP to complete in one step
+        else:
+            depth_inc = effective_rop / 3600  # Normal ROP calculation
 
         current_depth += depth_inc
         current_time += timedelta(seconds=1)
@@ -1170,27 +1174,24 @@ for i, program in enumerate(mud_programs):
 MIN_TOTAL_DEPTH = 3000  # Minimum well depth in meters
 MAX_TOTAL_DEPTH = 5000  # Maximum well depth in meters
 
-MAX_DEPTH = np.random.randint(3000, 5000)
 VERTICAL_SECTION_RATIO = 0.75  # Percentage of well that's vertical
 TANGENT_SECTION_RATIO = 0.15  # Percentage of well that's tangent
 # Horizontal section will be the remainder (1 - VERTICAL - TANGENT)
 
 # Main execution
 for well_idx, (well_id, long_val, lat_val) in enumerate(wells_info, start=1):
-    # First well is always vertical, others have 50% chance
-    # horizontal_prob = 1.0 if well_idx == 1 else 0.5
+     # Reset MAX_DEPTH for each well
+    MAX_DEPTH = np.random.randint(MIN_TOTAL_DEPTH, MAX_TOTAL_DEPTH)
+
     horizontal_prob = np.random.random()
     has_horizontal = horizontal_prob > 0.5
     vertical_ratio = VERTICAL_SECTION_RATIO if has_horizontal else 1.0
     tangent_ratio = TANGENT_SECTION_RATIO if has_horizontal else 0.0
 
-    # Reset MAX_DEPTH for each well
-    MAX_DEPTH = 500 # np.random.randint(MIN_TOTAL_DEPTH, MAX_TOTAL_DEPTH)
-
     # Generate layers with the current parameters
     layers = generate_formation_layers(
         total_depth = MAX_DEPTH,
-        has_horizontal=has_horizontal,
+        has_horizontal = has_horizontal,
         vertical_ratio = vertical_ratio,
         tangent_ratio = tangent_ratio
     )
@@ -1227,17 +1228,17 @@ for well_idx, (well_id, long_val, lat_val) in enumerate(wells_info, start=1):
               leave=True) as pbar:
 
         last_day_shown = 0
-        while remaining_records > 0 and chunk_start_depth < MAX_DEPTH:
+        while chunk_start_depth < MAX_DEPTH:
 
             current_chunk = min(chunk_size, remaining_records)  # Determine how many records to process
 
             df_chunk, chunk_start_time, chunk_start_depth = generate_well_data_chunk(
                 well_id, long_val, lat_val, current_chunk, chunk_start_time,
-                start_depth=chunk_start_depth,
-                max_depth=MAX_DEPTH,
-                vertical_ratio=vertical_ratio,
-                tangent_ratio=tangent_ratio,
-                has_horizontal=has_horizontal
+                has_horizontal = has_horizontal,
+                start_depth = chunk_start_depth,
+                max_depth = MAX_DEPTH,
+                vertical_ratio = vertical_ratio,
+                tangent_ratio = tangent_ratio,
             )
 
             remaining_records -= current_chunk  # Decrement remaining records
