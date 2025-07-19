@@ -36,7 +36,7 @@ using `generator.py` located in `/dataset/` directory generated a dataset with `
 
 - usage:
 ```python
-python genereator.py
+python generator.py
 ```
 - It has mulitple columns containing features and two different label: `Active_Damage` and `Type_Damage`
 - There are 4/5 colummns that are reduntant and has no impact on output
@@ -59,7 +59,7 @@ using `generator.py` located in `/dataset/` directory generated a dataset with `
 
 - usage:
 ```python
-python genereator.py
+python generator.py
 ```
 
 - It has mulitple columns containing features and two different label: `Active_Damage` and `Type_Damage`
