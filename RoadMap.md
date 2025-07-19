@@ -58,7 +58,7 @@ Generic Damage | Default category for severe, unspecified damage. Hard to treat.
 ## ML model
 ### Team Assignment
 - Aida,
-- Anahita
+- Mohammad Amin
 
 
 using `generator.py` located in `/dataset/` directory generated a dataset with `np.random.seed(42)`
