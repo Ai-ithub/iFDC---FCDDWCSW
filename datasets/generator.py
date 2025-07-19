@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 np.random.seed(42)
 
 records_per_well = 1 * 30 * 24 * 60 * 60  # 1 month in second
-chunk_size = 1_000_000        # Number of records to process in each chunk
+chunk_size = 1_000_000       # Number of records to process in each chunk
 
 output_dir = 'well_data'
 os.makedirs(output_dir, exist_ok=True)
@@ -82,13 +82,13 @@ formations = {
         'min_mud_weight': 10.0, 'max_mud_weight': 14.0, 'pressure_grad': 0.470,
         'reservoir': False,'seal': True,
     },
-    'Salt': { # Cap rock 
+    'Salt': { # Cap rock
         'density': 2.2, 'base_rop': 8, 'wob_factor': 1.5,
         'perm_range': (0.0001, 0.001), 'porosity': 3, 'clay_content_range': (0, 2),
         'fracture_grad': 0.85, 'temp_grad': 0.02, 'clay_type': 'None', 'fracture_prob': 0.01,
         'seal': True, 'reservoir': False
     },
-    'Tight_Carbonate': { # Cap rock 
+    'Tight_Carbonate': { # Cap rock
         'density': 2.6, 'base_rop': 10, 'wob_factor': 1.3,
         'perm_range': (0.01, 0.1), 'porosity': 5, 'clay_content_range': (5, 10),
         'fracture_grad': 0.8, 'temp_grad': 0.028, 'clay_type': 'Kaolinite',
@@ -188,7 +188,7 @@ mud_programs = [
 def select_formation(depth, exclude_caprocks=False, exclude_reservoirs=False):
     """Select formation based on depth, optionally excluding cap rocks"""
     options = []
-    
+
     for formation in formations:
         # Skip if excluded
         if exclude_caprocks and formations[formation].get('seal', False):
@@ -274,25 +274,24 @@ def get_formation_thickness(formation, current_depth):
         'Weathered_Rock': (5, 15),
         'Sandstone': (10, 100),
         'Shale': (50, 300),
-        'Limestone': (20, 150)
+        'Limestone': (20, 150),
+        'Shale_Seal': (30, 100),   # Caprocks
+        'Salt': (50, 200),         # Salt domes can be thick
+        'Tight_Carbonate': (20, 80)
     }
 
-    # Default to Sandstone thickness if formation not specified
-    base_range = base_thickness_ranges.get(formation, (10, 100))
 
     # Depth scaling factor (formations get thinner with depth)
-    depth_factor = max(0.3, 1 - (current_depth / 3000))
+    depth_factor = max(0.5, 1 - (current_depth / 3000))
 
-    min_thick = base_range[0] * depth_factor
-    max_thick = base_range[1] * depth_factor
+    min_thick, max_thick = base_thickness_ranges.get(formation, (10, 50))
+    return np.random.uniform(min_thick*depth_factor, max_thick*depth_factor)
 
-    return np.random.uniform(min_thick, max_thick)
+def generate_formation_layers(total_depth, has_horizontal=False, vertical_ratio=0.75, tangent_ratio=0.15):
 
-def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tangent_ratio=0.15):
     layers = []
     current_depth = 0
-    has_horizontal = np.random.random() < h_prob
-    
+
     # Always create surface layers
     layers.extend([
         create_layer(0, 2, 'Topsoil', is_horizontal=False),
@@ -303,7 +302,7 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
     if has_horizontal:
         # Vertical section only goes down to the start of tangent section
         vertical_depth = total_depth * vertical_ratio
-        
+
         # Drill through regular formations until we reach the tangent section start
         while current_depth < vertical_depth:
             formation = select_formation(current_depth, exclude_reservoirs=True)
@@ -318,7 +317,7 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
         # Calculate tangent section parameters
         tangent_section_length = total_depth * tangent_ratio
         tangent_end = current_depth + tangent_section_length
-        
+
         # Make caprock take the entire tangent section
         caprock_layer = create_layer(
             current_depth,
@@ -337,9 +336,9 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
         # Immediately transition to reservoir after caprock
         reservoir_thickness = total_depth - current_depth
         reservoir_formation = np.random.choice(['Sandstone', 'Limestone'], p=[0.7, 0.3])
-        
+
         reservoir_layer = create_layer(
-            current_depth, 
+            current_depth,
             current_depth + reservoir_thickness,
             reservoir_formation,
             is_horizontal=True
@@ -351,11 +350,11 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
             'seal': False
         })
         layers.append(reservoir_layer)
-        
+
     else:
         # Vertical-only well configuration
         reservoir_start_depth = total_depth * 0.8
-        
+
         while current_depth < reservoir_start_depth:
             formation = select_formation(current_depth)
             thickness = get_formation_thickness(formation, current_depth)
@@ -385,7 +384,7 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
         # Add reservoir (remaining depth)
         reservoir_formation = np.random.choice(['Sandstone', 'Limestone'], p=[0.7, 0.3])
         reservoir_thickness = total_depth - current_depth
-        
+
         reservoir_layer = create_layer(
             current_depth,
             current_depth + reservoir_thickness,
@@ -403,13 +402,7 @@ def generate_formation_layers(total_depth, h_prob=0.0, vertical_ratio=0.75, tang
     return layers
 
 def create_layer(top, bottom, formation, is_horizontal=False):
-    """Create layer with validation for cap rock/reservoir properties
-    Args:
-        top: Top depth of the layer (m)
-        bottom: Bottom depth of the layer (m)
-        formation: Formation name
-        is_horizontal: Boolean indicating if this is in horizontal section
-    """
+    """Enhanced layer creation with built-in damage potential"""
     if isinstance(formation, (np.str_, np.bytes_, np.object_)):
         formation = str(formation)
 
@@ -423,7 +416,40 @@ def create_layer(top, bottom, formation, is_horizontal=False):
     wob = calculate_wob(depth, props, is_horizontal=is_horizontal)
     rop = calculate_rop(wob, depth, props, is_horizontal=is_horizontal)
 
-    # Create the basic layer structure
+    # Base damage probability (0-20%) based on formation
+    base_damage_prob = {
+        'Shale': 0.25,
+        'Shale_Seal': 0.27,
+        'Sandstone': 0.20,
+        'Limestone': 0.17,
+        'Topsoil': 0.05,
+        'Weathered_Rock': 0.08,
+        'Salt': 0.15,
+        'Tight_Carbonate': 0.16
+    }.get(formation, 0.10)
+
+    # Damage types this formation is prone to
+    formation_damages = {
+        'Shale': ['Clay Swelling', 'Borehole Collapse', 'Shale Instability'],
+        'Shale_Seal': ['Caprock Integrity Loss', 'Microannulus Formation'],
+        'Sandstone': ['Fines Migration', 'Sand Production'],
+        'Limestone': ['Acid Solubility Damage', 'Fracture Plugging'],
+        'Topsoil': ['Surface Contamination'],
+        'Weathered_Rock': ['Unconsolidated Formation'],
+        'Salt': ['Salt Creep', 'Brine Influx'],
+        'Tight_Carbonate': ['Fracture Face Damage']
+    }.get(formation, ['Formation Damage'])
+
+    # Clay types
+    clay_types = {
+        'Shale': np.random.choice(['Illite', 'Smectite', 'Mixed-Layer'], p=[0.5, 0.3, 0.2]),
+        'Shale_Seal': 'Illite/Smectite',
+        'Sandstone': 'Kaolinite',
+        'Limestone': 'Kaolinite/Chlorite',
+        'Topsoil': 'Montmorillonite',
+        'Weathered_Rock': 'Kaolinite/Montmorillonite'
+    }
+
     layer = {
         'top': float(top),
         'bottom': float(bottom),
@@ -434,18 +460,24 @@ def create_layer(top, bottom, formation, is_horizontal=False):
         'porosity': float(props['porosity']),
         'perm': float(np.random.uniform(*props['perm_range'])),
         'clay_content': float(np.random.uniform(*props['clay_content_range'])),
-        'clay_type': str(props['clay_type']),
+        'clay_type': clay_types.get(formation, 'Kaolinite'),
         'fracture_prob': float(props['fracture_prob']),
         'temp_grad': float(props['temp_grad']),
         'is_horizontal': is_horizontal,
-        # Initialize these as False/None - will be overwritten if needed
         'reservoir': False,
         'seal': False,
-        'layer_type': 'None'
+        'layer_type': 'None',
+        # New damage properties
+        'base_damage_prob': base_damage_prob,
+        'potential_damages': formation_damages,
+        'max_damage_severity': np.random.uniform(0.1, 1.0),
+        'damage_triggers': {
+            'wob': np.random.normal(props.get('wob_factor', 1.0), 0.2),
+            'rop': np.random.normal(props.get('base_rop', 15), 5),
+            'temp': 20 + (depth * props.get('temp_grad', 0.025))
+        }
     }
 
-    # Special case: If this is being called from generate_formation_layers(),
-    # these values will be overwritten when we do reservoir_layer.update()
     return layer
 
 def calculate_wob(depth, formation_props, bit_type='PDC', is_horizontal=False):
@@ -453,7 +485,7 @@ def calculate_wob(depth, formation_props, bit_type='PDC', is_horizontal=False):
 
     # Get the formation name from the properties if available (some formations have it)
     formation_name = formation_props.get('formation', None)
-    
+
     # Caprocks often require higher WOB
     if formation_props.get('seal', False):
         wob_range = {
@@ -472,55 +504,55 @@ def calculate_wob(depth, formation_props, bit_type='PDC', is_horizontal=False):
             'Shale': (3000, 12000),
             'Limestone': (5000, 18000)
         }.get(formation_name, (2000, 10000))
-    
+
     # Horizontal section adjustment (reduced effective WOB)
     if is_horizontal:
         wob_range = (wob_range[0]*0.7, wob_range[1]*0.8)
-    
+
     # Depth adjustment
-    depth_factor = min(1.0, depth / 3000)  
+    depth_factor = min(1.0, depth / 3000)
     wob_base = wob_range[0] + (wob_range[1] - wob_range[0]) * depth_factor
-    
+
     # Apply formation-specific wob_factor
     wob = wob_base * formation_props['wob_factor'] * bit['wob_eff']
-    
+
     # Add random variation
     wob *= np.random.uniform(0.9, 1.1)
-    
+
     return min(wob, 25000)  # Absolute limit
- 
+
 
 def calculate_rop(wob, depth, formation, bit_type='PDC', is_horizontal=False):
     bit = bit_types[bit_type]
     effective_wob = min(wob, 25000)
-    
+
     # Base formation factors
     formation_factor = (2.5 / formation['density']) * formation['base_rop']
-    
+
     # Depth factor - ROP decreases with depth
-    depth_factor = max(0.3, 1 - (depth / 6000))  
-    
+    depth_factor = max(0.3, 1 - (depth / 6000))
+
     # WOB factor - diminishing returns at higher WOB
-    wob_factor = (effective_wob / 10000) ** 0.7  
-    
+    wob_factor = (effective_wob / 10000) ** 0.7
+
     # Horizontal section penalty (30-50% reduction)
     if is_horizontal:
-        horizontal_factor = 0.6  
+        horizontal_factor = 0.6
         # Additional reduction in caprocks
         if formation.get('seal', False):
             horizontal_factor *= 0.8
     else:
         horizontal_factor = 1.0
-        
+
     # Reservoir rock typically drills faster
     if formation.get('reservoir', False):
         reservoir_factor = 1.2
     else:
         reservoir_factor = 1.0
-        
-    rop = (formation_factor * depth_factor * wob_factor * 
+
+    rop = (formation_factor * depth_factor * wob_factor *
            bit['rop_eff'] * horizontal_factor * reservoir_factor)
-    
+
     return max(2, min(rop, 100))  # Keep within realistic bounds
 
 def select_completion_type(layers, drilling_phase=True):
@@ -555,9 +587,9 @@ def get_mud_program(depth, formation_props, is_horizontal=False):
             'weight': max(14.0, formation_props.get('min_mud_weight', 14.0)),
             'viscosity': 45,
             'ph': 9.0 if 'Shale' in formation else 7.5,
-            'additives': ['Bridging agents', 'Lost circulation materials'] 
+            'additives': ['Bridging agents', 'Lost circulation materials']
         }
-    
+
     # Special reservoir drilling fluid
     if formation_props.get('reservoir', False) and depth > 1500:
         return {
@@ -572,7 +604,7 @@ def get_mud_program(depth, formation_props, is_horizontal=False):
     if is_horizontal:
         base_program = get_mud_program(depth, formation_props)  # Get normal program first
         # Increase viscosity for better cuttings transport
-        base_program['viscosity'] *= 1.3  
+        base_program['viscosity'] *= 1.3
         # Add lubricants for reduced friction
         if 'additives' not in base_program:
             base_program['additives'] = []
@@ -580,7 +612,8 @@ def get_mud_program(depth, formation_props, is_horizontal=False):
         return base_program
 
     # Calculate formation pressure with default gradient if not specified
-    pressure_grad = formation_props.get('pressure_grad', 0.465)
+    pressure_grad = formation_props.get('pressure_grad',
+                  0.465 if depth < 3000 else np.random.uniform(0.45, 0.8))
     formation_pressure = depth * pressure_grad * 3.281  # Convert to psi
 
     # Rest of the function remains the same...
@@ -619,11 +652,12 @@ def get_mud_program(depth, formation_props, is_horizontal=False):
             mud['additives'] = formation_props.get('additives', [])
             return mud
 
+    viscosity = np.random.uniform(25, 50) if depth > 1000 else np.random.uniform(15, 30)
     # Fallback with safety margins
     return {
         'type': formation_props.get('preferred_mud_type', 'Water-based'),
         'weight': required_weight * 1.05,  # 5% overbalance
-        'viscosity': 30,
+        'viscosity': viscosity,
         'ph': 9.0 if formation == 'Shale' else 8.5,
         'temp_diff': (3, 5),
         'additives': formation_props.get('additives', [])
@@ -699,7 +733,7 @@ def calculate_mud_temperatures(mud_program, formation_temp):
     """Calculate realistic mud temperatures with safe defaults"""
     # Get temp_diff with fallback to default range
     temp_diff_range = mud_program.get('temp_diff', (3, 6))  # Default range if not specified
-    
+
     # Mud temperature in is slightly cooler than formation
     mud_temp_in = formation_temp - np.random.uniform(1, 3)
 
@@ -708,7 +742,7 @@ def calculate_mud_temperatures(mud_program, formation_temp):
         temp_diff = np.random.uniform(*temp_diff_range)
     except:
         temp_diff = np.random.uniform(3, 6)  # Hardcoded fallback
-    
+
     mud_temp_out = mud_temp_in + temp_diff
 
     # Ensure physical consistency
@@ -717,39 +751,68 @@ def calculate_mud_temperatures(mud_program, formation_temp):
 
     return mud_temp_in, mud_temp_out
 
+def generate_damage_indicator(row, layer):
 
-def generate_damage_indicator(row):
-    base_prob = {
-        'Shale': 0.15,
-        'Sandstone': 0.07,
-        'Limestone': 0.05,
-        'Topsoil': 0.02
-    }.get(row['Formation_Type'], 0.05)
-
-    risk_factors = {
-        'high_clay': (row['Clay_Content_Percent_%'] > 30, 0.25),
-        'overbalance': (row['Overbalance_psi'] > 500, 0.15),
-        'mud_weight': (row['Mud_Weight_In_ppg'] > 11, 0.1),
-        'low_perm': (row['Formation_Permeability_mD'] < 10, 0.2)
+    # Calculate base probability using layer properties
+    current_wob = row.get('Weight_on_Bit_kg', 0)
+    current_rop = row.get('ROP_m_hr', 0)
+    current_temp = row.get('Reservoir_Temperature_C', 0)
+    
+    wob_factor = min(1.5, current_wob / layer['damage_triggers']['wob']) if layer['damage_triggers']['wob'] > 0 else 1.0
+    rop_factor = min(2.0, current_rop / layer['damage_triggers']['rop']) if layer['damage_triggers']['rop'] > 0 else 1.0
+    temp_factor = min(1.8, current_temp / layer['damage_triggers']['temp']) if layer['damage_triggers']['temp'] > 0 else 1.0
+    
+    # Increase base damage probability to 30% (from 20%)
+    damage_prob = min(0.3, layer['base_damage_prob'] * wob_factor * rop_factor * temp_factor)
+    
+    if np.random.random() > damage_prob:
+        return "No", "None", None, "No"  # Added "No" for controllable
+    
+    # Damage types with adjusted base severities for 50-50 distribution
+    formation = row.get('Formation_Type', 'Unknown')
+    clay_content = row.get('Clay_Content_Percent_%', 0)
+    clay_type = row.get('Clay_Mineralogy_Type', '')
+    
+    damage_types = {
+        'Shale': [
+            ("Clay Swelling", 0.50, clay_content > 35 and 'Montmorillonite' in clay_type, "Yes"),
+            ("Shale Instability", 0.45, clay_content > 30, "Yes"),
+            ("Borehole Collapse", 0.40, row.get('Overbalance_psi', 0) > 500, "No")
+        ],
+        'Sandstone': [
+            ("Fines Migration", 0.55, row.get('Formation_Permeability_mD', 0) < 50, "Yes"),
+            ("Sand Production", 0.45, row.get('ROP_m_hr', 0) > 25, "No")
+        ],
+        'Limestone': [
+            ("Acid Solubility", 0.60, row.get('Mud_pH', 0) < 7.0, "Yes"),
+            ("Fracture Plugging", 0.50, row.get('Fluid_Loss_API_ml_30min', 0) > 1.0, "No")
+        ],
+        'Salt': [
+            ("Salt Creep", 0.70, row.get('Reservoir_Temperature_C', 0) > 90, "No"),
+            ("Brine Influx", 0.60, row.get('Chloride_Content_mg_l', 0) > 1000, "No")
+        ]
     }
-
-    damage_prob = base_prob
-    for factor, (condition, weight) in risk_factors.items():
+    
+    # Get applicable damage types for this formation
+    candidates = []
+    for damage, base_severity, condition, controllable in damage_types.get(formation, []):
         if condition:
-            damage_prob = min(0.95, damage_prob + weight)
-
-    damage_types = [
-        ("Fluid Invasion", 0.4),
-        ("Clay Swelling", 0.3 if row['Clay_Content_Percent_%'] > 20 else 0.1),
-        ("Fines Migration", 0.2),
-        ("Scale Deposition", 0.1),
-        ("Emulsion Blockage", 0.05)
-    ]
-
-    if np.random.random() < damage_prob:
-        types, probs = zip(*damage_types)
-        return 'Yes', np.random.choice(types, p=np.array(probs)/sum(probs))
-    return 'No', 'None'
+            # Adjust severity to be more evenly distributed around 0.5
+            severity = min(1.0, base_severity * np.random.uniform(0.7, 1.3))
+            candidates.append((damage, severity, controllable))
+    
+    # If no specific damage matches, use generic formation damage with 50% chance for each type
+    if not candidates:
+        severity = np.random.uniform(0.4, 0.9)  # Wider range centered around 0.65
+        controllable = "Yes" if np.random.random() > 0.5 else "No"
+        return "Yes", "Formation Damage", round(severity, 2), controllable
+    
+    # Select a damage type weighted by severity
+    damages, severities, controllables = zip(*candidates)
+    chosen_idx = np.random.choice(len(candidates), p=np.array(severities)/sum(severities))
+    damage, severity, controllable = candidates[chosen_idx]
+    
+    return "Yes", damage, round(severity, 2), controllable
 
 # PyArrow schema definition
 schema = pa.schema([
@@ -796,14 +859,15 @@ schema = pa.schema([
     ('Completion_Type', pa.string()),
     ('Density_Perforation_shots_m', pa.int64()),
     ('Active_Damage', pa.string()),
-    ('Type_Damage', pa.string())
+    ('Type_Damage', pa.string()),
+    ('Damage_Severity', pa.float64()),
+    ('Controllable', pa.string()), 
 ])
 
-def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time, 
-                           start_depth=0.0, max_depth=3000, vertical_ratio=0.75, 
-                           tangent_ratio=0.15, h_prob=0.0):
-    # Calculate section depths
-    has_horizontal = np.random.random() < h_prob
+def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time,
+                           start_depth=0.0, max_depth=3000, vertical_ratio=0.75,
+                           tangent_ratio=0.15, has_horizontal=False):
+
     if has_horizontal:
         vertical_depth = max_depth * vertical_ratio
         tangent_depth = vertical_depth + (max_depth * tangent_ratio)
@@ -824,7 +888,7 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
     if start_depth >= max_depth:
         return pd.DataFrame(), start_time, start_depth
 
-    layers = generate_formation_layers(max_depth, h_prob=h_prob,
+    layers = generate_formation_layers(max_depth, has_horizontal=has_horizontal,
                                        vertical_ratio=vertical_ratio, tangent_ratio=tangent_ratio)
     completion_type, perf_density = select_completion_type(layers)
 
@@ -833,7 +897,7 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
     current_time = start_time
     bit_wear = 0.0
     mud_contamination = 0.0
-    equipment_efficiency = 1.0  # Starts at 100%
+    equipment_efficiency = np.random.uniform(0.95, 1.0)  # 95-100% for new
 
     data = defaultdict(list)
 
@@ -965,15 +1029,25 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
         out_flow_rate = in_flow_rate * np.random.uniform(0.93, 0.98)
 
         # Damage indicator
-        damage_active, damage_type = generate_damage_indicator({
+        damage_active, damage_type, damage_severity, controllable = generate_damage_indicator({
             'Clay_Content_Percent_%': layer['clay_content'],
             'Overbalance_psi': pressures['overbalance'],
             'Formation_Type': formation,
             'Mud_Weight_In_ppg': mud['weight'],
             'Formation_Permeability_mD': layer['perm'],
             'Mud_Type': mud['type'],
-            'Mud_pH': mud['ph']
-        })
+            'Mud_pH': mud['ph'],
+            'Weight_on_Bit_kg': layer['wob'],
+            'ROP_m_hr': effective_rop,
+            'Reservoir_Temperature_C': formation_temp,
+            'Depth_Measured_m': current_depth,
+            'Clay_Mineralogy_Type': layer['clay_type'],
+            'Fluid_Loss_API_ml_30min': np.random.uniform(0.5, 2.0) if mud['type'] == 'Water-based' else np.random.uniform(0.1, 0.5),
+            'Chloride_Content_mg_l': calculate_chloride_content(current_depth, mud, formation),
+            'Solid_Content_%': np.random.uniform(5, 15),
+            'Completion_Type': completion_type,
+            'Porosity_Formation_%': layer['porosity']
+        }, layer)
 
         # Torque calculation
         base_torque = layer['wob'] / 10
@@ -1031,6 +1105,8 @@ def generate_well_data_chunk(well_id, long_val, lat_val, num_records, start_time
             'Density_Perforation_shots_m': int(perf_density),
             'Active_Damage': damage_active,
             'Type_Damage': damage_type,
+            'Damage_Severity': damage_severity if damage_severity is not None else 0.0,
+            'Controllable': controllable,
             'Bit_Wear_%': float(bit_wear * 100),
             'Mud_Contamination_%': float(mud_contamination * 100),
             'Equipment_Efficiency_%': float(equipment_efficiency * 100),
@@ -1098,39 +1174,43 @@ MAX_DEPTH = np.random.randint(3000, 5000)
 VERTICAL_SECTION_RATIO = 0.75  # Percentage of well that's vertical
 TANGENT_SECTION_RATIO = 0.15  # Percentage of well that's tangent
 # Horizontal section will be the remainder (1 - VERTICAL - TANGENT)
+
 # Main execution
 for well_idx, (well_id, long_val, lat_val) in enumerate(wells_info, start=1):
     # First well is always vertical, others have 50% chance
-    horizontal_prob = 1.0 if well_idx == 1 else 0.5
-    vertical_ratio = 1.0 if horizontal_prob == 0 else VERTICAL_SECTION_RATIO
-    tangent_ratio = 0.0 if horizontal_prob == 0 else TANGENT_SECTION_RATIO
-    
+    # horizontal_prob = 1.0 if well_idx == 1 else 0.5
+    horizontal_prob = np.random.random()
+    has_horizontal = horizontal_prob > 0.5
+    vertical_ratio = VERTICAL_SECTION_RATIO if has_horizontal else 1.0
+    tangent_ratio = TANGENT_SECTION_RATIO if has_horizontal else 0.0
+
     # Reset MAX_DEPTH for each well
-    MAX_DEPTH = np.random.randint(MIN_TOTAL_DEPTH, MAX_TOTAL_DEPTH)
-    
+    MAX_DEPTH = 500 # np.random.randint(MIN_TOTAL_DEPTH, MAX_TOTAL_DEPTH)
+
     # Generate layers with the current parameters
     layers = generate_formation_layers(
         total_depth = MAX_DEPTH,
-        h_prob = horizontal_prob,
+        has_horizontal=has_horizontal,
         vertical_ratio = vertical_ratio,
         tangent_ratio = tangent_ratio
     )
-    
-    # Debugging:
+
+    # Debugging
     print(f"\nWell {well_id} configuration:")
     print(f"  Total depth: {MAX_DEPTH}m")
-    print(f"  Horizontal probability: {horizontal_prob}")
+    print(f"  Horizontal probability: {horizontal_prob:.2f} -- Horizontal: {has_horizontal}")
     print(f"  Vertical section: {vertical_ratio*100}%")
     print(f"  Tangent section: {tangent_ratio*100}%")
     print("Formation layers:")
     for layer in layers:
         print(f"  {layer['top']:.1f}-{layer['bottom']:.1f}m: {layer['formation']} "
+            f"\t\t - porosity: {layer['porosity']:.2f}%, permeability: {layer['perm']:.2f} mD "
             f"{'(Horizontal)' if layer.get('is_horizontal', False) else ''} "
             f"{'(Reservoir)' if layer.get('reservoir', False) else ''} "
             f"{'(Caprock)' if layer.get('seal', False) else ''}")
-        
+
     actual_max_depth = layers[-1]['bottom']
-    
+
     file_path = os.path.join(output_dir, f'well_{well_id}.parquet')
     writer = None
     remaining_records = records_per_well
@@ -1155,14 +1235,14 @@ for well_idx, (well_id, long_val, lat_val) in enumerate(wells_info, start=1):
                 well_id, long_val, lat_val, current_chunk, chunk_start_time,
                 start_depth=chunk_start_depth,
                 max_depth=MAX_DEPTH,
-                vertical_ratio=VERTICAL_SECTION_RATIO,
-                tangent_ratio=TANGENT_SECTION_RATIO,
-                h_prob=horizontal_prob
+                vertical_ratio=vertical_ratio,
+                tangent_ratio=tangent_ratio,
+                has_horizontal=has_horizontal
             )
-            
+
             remaining_records -= current_chunk  # Decrement remaining records
             # If we got an empty dataframe, we've reached max depth
-            
+
             if df_chunk.empty:
                 break
 
@@ -1184,4 +1264,4 @@ for well_idx, (well_id, long_val, lat_val) in enumerate(wells_info, start=1):
     if writer:
         writer.close()
 
-print("Data generation completed successfully.")
+print(f"Data generated successfully... saved at {output_dir} directory")
