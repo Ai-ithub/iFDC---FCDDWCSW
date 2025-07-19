@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 np.random.seed(42)
 
 records_per_well = 1 * 30 * 24 * 60 * 60  # 1 month in second
-chunk_size = 1_000       # Number of records to process in each chunk
+chunk_size = 1_000_000       # Number of records to process in each chunk
 
 output_dir = 'well_data'
 os.makedirs(output_dir, exist_ok=True)
@@ -20,14 +20,14 @@ os.makedirs(output_dir, exist_ok=True)
 wells_info = [
     (40100050, -94.86, 32.26),
     (40131881, -94.82, 32.26),
-#     (40134068, -94.78, 32.25),
-#     (40181715, -94.95, 32.17),
-#     (36535068, -94.18, 32.32),
-#     (36500362, -94.13, 32.32),
-#     (36530944, -94.15, 32.12),
-#     (18332094, -94.62, 32.37),
-#     (18331921, -94.6, 32.37),
-#     (18387931, -94.86, 32.45)
+    (40134068, -94.78, 32.25),
+    (40181715, -94.95, 32.17),
+    (36535068, -94.18, 32.32),
+    (36500362, -94.13, 32.32),
+    (36530944, -94.15, 32.12),
+    (18332094, -94.62, 32.37),
+    (18331921, -94.6, 32.37),
+    (18387931, -94.86, 32.45)
 ]
 start_date = datetime(2023, 1, 1)
 
