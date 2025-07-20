@@ -2,11 +2,11 @@
 
 __Table 0f content__
 <ul>
-  <li><a href="#us-patent">US patent --> Milad Pour yazdani</a></li>
-  <li><a href="#generating-data">Generating data</a></li>
-  <li><a href="#add-new-label">Add new label</a></li>
-  <li><a href="#ml-model">ML model</a></li>
-  <li><a href="#deep-learning-models">Deep learning models</a></li>  
+  <li><a href="#us-patent">US patent --> In progress 🛠️ Milad Pour yazdani</a></li>
+  <li><a href="#generating-data">Generating data --> MohammadDaraee</a></li>
+  <li><a href="#add-new-label">Add new label --> Done ✅ MohammadDaraee</a></li>
+  <li><a href="#ml-model">ML model --> In progress 🛠️ MOhammad Amin, Aida</a></li>
+  <li><a href="#deep-learning-models">Deep learning models --> In progress 🛠️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
 </ul>
 
 ---
