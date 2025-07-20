@@ -147,3 +147,11 @@ There are two issues connected with this problem:
 
 ---
 ## RTO Using Reinforcement
+
+### Team Assignment
+- juan
+- mehmoot
+
+[issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/53)
+
+Consider two type of RL: offline learning and real time learning
