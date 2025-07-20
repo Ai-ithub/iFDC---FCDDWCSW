@@ -7,7 +7,7 @@ __Table 0f content__
   <li><a href="#add-new-label">Add new label --> Done ✅ MohammadDaraee</a></li>
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
-  <li><a href="#hyperparameter-ptimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
+  <li><a href="#hyperparameter-optimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
 </ul>
 
 ---
