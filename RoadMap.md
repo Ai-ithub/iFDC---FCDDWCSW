@@ -85,6 +85,10 @@ task goal is to handle these kinds of problems
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/46)
 
+create a new file called, `handling_missing_value.py` and put it in `.\dataset\` folder
+
+the code should show if the dataset has missing value or not, if so, show the percentage of missing value
+
 ---
 
 ## ML model
