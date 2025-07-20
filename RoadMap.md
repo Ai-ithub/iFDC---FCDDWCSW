@@ -2,7 +2,7 @@
 
 __Table 0f content__
 <ul>
-  <li><a href="#us-patent">💡 US patent --> In progress 🚧 Milad Pour yazdani</a></li>
+  <li><a href="#us-patent">US patent --> In progress 🚧 Milad Pour yazdani</a></li>
   <li><a href="#generating-data">Generating data --> Drilling data completed 🚧 MohammadDaraee</a></li>
   <li><a href="#handling-missing-data"> Handling Missing Data --> In progress 🚧 Mohammad Amin</a></li>
   <li><a href="#handling-outlier"> Handling Outlier --> waiting😮‍💨 </a></li>
@@ -13,7 +13,7 @@ __Table 0f content__
 </ul>
 
 ---
-## 💡 US patent
+## US patent
 ### Team Assignment
 - Milad Pour yazdani
 
