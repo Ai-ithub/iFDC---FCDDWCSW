@@ -2,11 +2,12 @@
 
 __Table 0f content__
 <ul>
-  <li><a href="#us-patent">US patent --> In progress 🛠️ Milad Pour yazdani</a></li>
+  <li><a href="#us-patent">US patent --> In progress 🚧 Milad Pour yazdani</a></li>
   <li><a href="#generating-data">Generating data --> MohammadDaraee</a></li>
   <li><a href="#add-new-label">Add new label --> Done ✅ MohammadDaraee</a></li>
-  <li><a href="#ml-model">ML model --> In progress 🛠️ MOhammad Amin, Aida</a></li>
-  <li><a href="#deep-learning-models">Deep learning models --> In progress 🛠️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
+  <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
+  <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
+  <li><a href="#hyperparameter-ptimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
 </ul>
 
 ---
@@ -110,3 +111,16 @@ preprocessing the data and apply a window (number of time steps that need to pre
 - LSTM
 - GRU
 - Transformer --> Amin
+
+---
+## Hyperparameter Optimization
+
+### Team Assignment
+- Eveyone in Deep learning models
+
+[issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
+
+- Optuna
+- SHAP
+
+
