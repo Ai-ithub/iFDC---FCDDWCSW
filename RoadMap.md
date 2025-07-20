@@ -4,7 +4,8 @@ __Table 0f content__
 <ul>
   <li><a href="#us-patent">US patent --> In progress 🚧 Milad Pour yazdani</a></li>
   <li><a href="#generating-data">Generating data --> MohammadDaraee</a></li>
-  <li><a href="#add-new-label">Add new label --> Done ✅ MohammadDaraee</a></li>
+  <li><a href="#handling-missing-data">Handling Missing Data --> Mohammad Amin</a></li>
+  <li><a href="#add-new-label">Add new label --> Done ✅ Mohammad Daraee</a></li>
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
   <li><a href="#hyperparameter-optimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
@@ -63,6 +64,14 @@ Stress/Corrosion Cracking | Reservoir_Temperature > 95 + Mud_Weight_In > 9.5. 
 Generic Damage | Default category for severe, unspecified damage. Hard to treat.
 
 ---
+## Handling Missing Data
+### Team Assignment
+- Mohammad Amin
+[issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/45)
+
+In real data or in the feature datasets there might be some datasets that need correction, this
+task goal is to handle these kinds of problems
+---
 
 ## ML model
 ### Team Assignment
@@ -116,7 +125,7 @@ preprocessing the data and apply a window (number of time steps that need to pre
 ## Hyperparameter Optimization
 
 ### Team Assignment
-- Eveyone in Deep learning models
+- Eveyone in Deep learning models, who implemented the model
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
 
