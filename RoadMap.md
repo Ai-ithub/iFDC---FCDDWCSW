@@ -3,8 +3,9 @@
 __Table 0f content__
 <ul>
   <li><a href="#us-patent">US patent --> In progress 🚧 Milad Pour yazdani</a></li>
-  <li><a href="#generating-data">Generating data --> MohammadDaraee</a></li>
-  <li><a href="#handling-missing-data"> In progress 🚧 Handling Missing Data --> Mohammad Amin</a></li>
+  <li><a href="#generating-data">Generating data --> Drilling data completed 🚧 MohammadDaraee</a></li>
+  <li><a href="#handling-missing-data"> Handling Missing Data --> In progress 🚧 Mohammad Amin</a></li>
+  <li><a href="#handling-outlier"> Handling Outlier --> In progress 🚧 Mohammad Amin</a></li>
   <li><a href="#add-new-label">Add new label --> Done ✅ Mohammad Daraee</a></li>
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
@@ -20,6 +21,8 @@ __Table 0f content__
 
 ---
 ## Generating data
+
+[issue for impromvement](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/8)
 
 We want to create a dataset to be almost like a real senario. which has three phase:
 - Drilling
@@ -71,6 +74,13 @@ Generic Damage | Default category for severe, unspecified damage. Hard to treat.
 
 In real data or in the feature datasets there might be some datasets that need correction, this
 task goal is to handle these kinds of problems
+
+---
+## Handling Outlier
+### Team Assignment
+- 
+
+[issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/46)
 
 ---
 
