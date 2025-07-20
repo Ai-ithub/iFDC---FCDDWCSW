@@ -13,8 +13,7 @@ __Table 0f content__
 </ul>
 
 ---
-💡
-## US patent
+## 💡 US patent
 ### Team Assignment
 - Milad Pour yazdani
 
