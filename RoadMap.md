@@ -10,7 +10,7 @@ __Table 0f content__
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
   <li><a href="#hyperparameter-optimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
-  <li><a href="#rto-using-reinforcement"> Real-Time Optimization (RTO) using Reinforcement --> waiting😮‍💨 </a></li>
+  <li><a href="#rto-using-reinforcement"> Real-Time Optimization (RTO) using Reinforcement --> In progress 🚧️ juan Mehmmot </a></li>
 </ul>
 
 ---
