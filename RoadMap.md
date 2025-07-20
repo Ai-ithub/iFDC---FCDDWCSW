@@ -138,9 +138,8 @@ preprocessing the data and apply a window (number of time steps that need to pre
 ### Team Assignment
 - Eveyone in Deep learning models, who implemented the model
 
-[issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
-
-- Optuna
-- SHAP
+There are two issues connected with this problem:
+1. [issue1](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
+2. [issue2](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/47)
 
 
