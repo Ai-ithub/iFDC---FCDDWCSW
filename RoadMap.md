@@ -10,6 +10,7 @@ __Table 0f content__
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
   <li><a href="#hyperparameter-optimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
+  <li><a href="#rto-using-reinforcement"> Real-Time Optimization (RTO) using Reinforcement --> waiting😮‍💨 </a></li>
 </ul>
 
 ---
@@ -22,7 +23,9 @@ __Table 0f content__
 ---
 ## Generating data
 
-[issue for impromvement](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/8)
+There are two issues connected to this problem:
+1. [issue1](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/48)
+2. [issue for impromvement](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/8)
 
 We want to create a dataset to be almost like a real senario. which has three phase:
 - Drilling
@@ -142,4 +145,5 @@ There are two issues connected with this problem:
 1. [issue1](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
 2. [issue2](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/47)
 
-
+---
+## RTO Using Reinforcement
