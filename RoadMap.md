@@ -2,7 +2,7 @@
 
 __Table 0f content__
 <ul>
-  <li><a href="#us-patent">Generating data --> Milad Pour yazdani</a></li>
+  <li><a href="#us-patent">US patent --> Milad Pour yazdani</a></li>
   <li><a href="#generating-data">Generating data</a></li>
   <li><a href="#add-new-label">Add new label</a></li>
   <li><a href="#ml-model">ML model</a></li>
