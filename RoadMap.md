@@ -17,7 +17,7 @@ __Table 0f content__
 ## US patent search
 ### Team Assignment
 ```diff
-- Milad Pour yazdani in red
+- Milad Pour yazdani
 ```
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/61)
@@ -75,7 +75,7 @@ Generic Damage | Default category for severe, unspecified damage. Hard to treat.
 ## Handling Missing Data
 ### Team Assignment
 ```diff
-- Mohammad Amin in red
+- Mohammad Amin
 ```
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/45)
