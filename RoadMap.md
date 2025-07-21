@@ -3,13 +3,13 @@
 __Table 0f content__
 <ul>
   <li><a href="#us-patent-search">US patent search --> In progress 🚧 Milad Pour yazdani</a></li>
-  <li><a href="#generating-data">Generating data --> Drilling data completed 🚧 MohammadDaraee</a></li>
-  <li><a href="#handling-missing-data"> Handling Missing Data --> In progress 🚧 Mohammad Amin</a></li>
-  <li><a href="#handling-outlier"> Handling Outlier --> In progress 🚧 Arezoo jafarpour</a></li>
-  <li><a href="#add-new-label">Add new label --> Done ✅ Mohammad Daraee</a></li>
+  <li><a href="#generating-data">Generating data (DVR) --> Drilling data completed 🚧 MohammadDaraee</a></li>
+  <li><a href="#handling-missing-data"> Handling Missing Data (DVR) --> In progress 🚧 Mohammad Amin</a></li>
+  <li><a href="#handling-outlier"> Handling Outlier (DVR) --> In progress 🚧 Arezoo jafarpour</a></li>
+  <li><a href="#add-new-label">Add new label (DVR) --> Done ✅ Mohammad Daraee</a></li>
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
-  <li><a href="#hyperparameter-optimization">Hyperparameter Optimization --> In progress 🚧️ eveybody implement the model</a></li>
+  <li><a href="#hyperparameter-optimization">Hyperparameter Optimization (RTO) --> In progress 🚧️ eveybody implement the model</a></li>
   <li><a href="#rto-using-reinforcement"> Real-Time Optimization (RTO) using Reinforcement --> In progress 🚧️ juan Mehmmot </a></li>
 </ul>
 
