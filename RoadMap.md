@@ -4,8 +4,8 @@ __Table 0f content__
 <ul>
   <li><a href="#us-patent-search">US patent search --> In progress 🚧 Milad Pour yazdani</a></li>
   <li><a href="#generating-data">Generating data --> Drilling data completed 🚧 MohammadDaraee</a></li>
-  <li><a href="#handling-missing-data"> Handling Missing Data --> In progress 🚧 Mohammad Amin, Arezoo jafarpour</a></li>
-  <li><a href="#handling-outlier"> Handling Outlier --> waiting😮‍💨 </a></li>
+  <li><a href="#handling-missing-data"> Handling Missing Data --> In progress 🚧 Mohammad Amin</a></li>
+  <li><a href="#handling-outlier"> Handling Outlier --> In progress 🚧 Arezoo jafarpour</a></li>
   <li><a href="#add-new-label">Add new label --> Done ✅ Mohammad Daraee</a></li>
   <li><a href="#ml-model">ML model --> In progress 🚧 MOhammad Amin, Aida</a></li>
   <li><a href="#deep-learning-models">Deep learning models --> In progress 🚧️ MohammadDaraee, Amin Ashoori, juan Mehmmot</a></li>  
