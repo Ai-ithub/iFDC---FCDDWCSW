@@ -17,6 +17,10 @@ __Table 0f content__
 ## US patent search
 ### Team Assignment
 - <code style="color : cyan">Milad Pour yazdani</code> 
+<code style="color : cyan">Milad Pour yazdani</code>
+```diff
+- Milad Pour yazdani in red
+```
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/61)
 
