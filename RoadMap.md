@@ -16,8 +16,6 @@ __Table 0f content__
 ---
 ## US patent search
 ### Team Assignment
-- <code style="color : cyan">Milad Pour yazdani</code> 
-<code style="color : cyan">Milad Pour yazdani</code>
 ```diff
 - Milad Pour yazdani in red
 ```
@@ -76,7 +74,10 @@ Generic Damage | Default category for severe, unspecified damage. Hard to treat.
 ---
 ## Handling Missing Data
 ### Team Assignment
-- Mohammad Amin
+```diff
+- Mohammad Amin in red
+```
+
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/45)
 
 In real data or in the feature datasets there might be some datasets that need correction, this
@@ -85,7 +86,9 @@ task goal is to handle these kinds of problems
 ---
 ## Handling Outlier
 ### Team Assignment
+```diff
 - Arezoo jafarpour
+```
 
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/46)
 
@@ -97,9 +100,10 @@ the code should show if the dataset has missing value or not, if so, show the pe
 
 ## ML model
 ### Team Assignment
+```diff
 - Aida,
 - Mohammad Amin
-
+```
 
 using `generator.py` located in `/dataset/` directory generated a dataset with `np.random.seed(42)`
 
@@ -120,9 +124,11 @@ preprocessing the data and apply a window (number of time steps that need to pre
 ## Deep learning models
 
 ### Team Assignment
+```diff
 - Amin,
 - Juan,
 - Mehmoot
+```
 
 using `generator.py` located in `/dataset/` directory generated a dataset with `np.random.seed(42)`
 
@@ -147,7 +153,9 @@ preprocessing the data and apply a window (number of time steps that need to pre
 ## Hyperparameter Optimization
 
 ### Team Assignment
+```diff
 - Eveyone in Deep learning models, who implemented the model
+```
 
 There are two issues connected with this problem:
 1. [issue1](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/32)
@@ -157,9 +165,10 @@ There are two issues connected with this problem:
 ## RTO Using Reinforcement
 
 ### Team Assignment
+```diff
 - juan
 - mehmoot
-
+```
 [issue](https://github.com/Ai-ithub/iFDC---FCDDWCSW/issues/53)
 
 Consider two type of RL: offline learning and real time learning
