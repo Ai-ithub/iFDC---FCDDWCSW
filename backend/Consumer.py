@@ -3,9 +3,9 @@ import json
 
 # ---------- Kafka Consumer Configuration ----------
 conf = {
-    'bootstrap.servers': 'localhost:9092',     # آدرس Kafka
-    'group.id': 'well-stream-consumer-group',  # نام گروه مصرف‌کننده
-    'auto.offset.reset': 'earliest'            # خواندن از اولین پیام‌های موجود
+    'bootstrap.servers': 'localhost:9092',     
+    'group.id': 'well-stream-consumer-group',  
+    'auto.offset.reset': 'earliest'            
 }
 
 topic = 'fdms.well.stream'
@@ -18,7 +18,7 @@ print(f"📡 Consumer connected to topic '{topic}' and waiting for data... (Pres
 
 try:
     while True:
-        msg = consumer.poll(1.0)  # تا 1 ثانیه منتظر می‌ماند
+        msg = consumer.poll(1.0) 
 
         if msg is None:
             continue
@@ -45,3 +45,4 @@ except KeyboardInterrupt:
 
 finally:
     consumer.close()
+
