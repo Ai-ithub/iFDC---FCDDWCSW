@@ -16,15 +16,6 @@ A total of **20 output files** will be generated.
 
 ---
 
-## 🌐 Output Links
-- 📁 **Outliers files:**  
-[View on Google Drive](https://drive.google.com/drive/folders/1qT4fQW5Axo0V7-gXk44aYTIKh7sae6jS?usp=sharing)
-
-- 📁 **Clean files:**  
-[View on Google Drive](https://drive.google.com/drive/folders/1wCULRYz7YScCylSPgu0GbIAZlNjPqxw2?usp=sharing)
-
----
-
 ## 📝 Features
 - Outlier detection based on the following columns:
   - `temperature`
@@ -39,7 +30,4 @@ A total of **20 output files** will be generated.
 ## 🚀 General Execution:
 1️⃣ Input: 10 parquet files in a folder  
 2️⃣ Processing: Outlier detection and clean data generation  
-3️⃣ Output: 20 files (10 outliers + 10 clean)  
-4️⃣ Store outputs in Google Drive (links above).
-
----
+3️⃣ Output: 20 files (10 outliers + 10 clean)
