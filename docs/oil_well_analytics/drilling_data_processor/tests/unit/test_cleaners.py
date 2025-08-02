@@ -7,27 +7,27 @@ sys.path.append('/Users/parnian/Desktop/oil_well_analytics/drilling_data_process
 
 @pytest.fixture
 def sample_well_data():
-    """نمونه داده تستی با مقادیر NaN برای بررسی ایمپوت"""
+    """Sample test data with NaN values for imputation testing"""
     return pd.DataFrame({
         'Well_ID': ['WELL_001', 'WELL_002', 'WELL_003'],
-        'Temperature_C': [80.5, 120.3, None],  # مقدار NaN برای تست ایمپوت عددی
+        'Temperature_C': [80.5, 120.3, None],  # NaN value for numeric imputation test
         'Pressure_psi': [5000, 12000, 8000],
-        'Formation': ['Sandstone', 'Carbonate', None],  # مقدار NaN برای تست ایمپوت متنی
-        'Damage_Type': ['Clay & Iron', None, 'Fluid Loss']  # مقدار NaN برای تست ایمپوت متنی
+        'Formation': ['Sandstone', 'Carbonate', None],  # NaN value for categorical imputation test
+        'Damage_Type': ['Clay & Iron', None, 'Fluid Loss']  # NaN value for categorical imputation test
     })
 
 def test_cleaner_imputation(sample_well_data):
-    """تست عملکرد imputer بر روی داده‌های حفاری"""
+    """Test the imputer functionality on well data"""
     cleaner = DataCleaner()
     
-    # ✅ اعمال ایمپوت سفارشی برای ستون‌های متنی
+    # ✅ Apply custom imputation for categorical columns
     cleaned = cleaner.handle_missing_values(
         sample_well_data,
         custom_strategy={"Formation": "most_frequent", "Damage_Type": "most_frequent"}
     )
     
-    # ✅ بررسی اینکه هیچ مقدار NaN باقی نمانده
-    assert cleaned.isna().sum().sum() == 0, f"❌ مقدار NaN باقی مانده: \n{cleaned.isna().sum()}"
+    # ✅ Check that no NaN values remain
+    assert cleaned.isna().sum().sum() == 0, f"❌ Remaining NaN values: \n{cleaned.isna().sum()}"
 
-    # ✅ بررسی حفظ ساختار داده‌ها
-    assert set(cleaned.columns) == set(sample_well_data.columns), "❌ نام ستون‌ها تغییر کرده!"
+    # ✅ Check that the data structure is preserved
+    assert set(cleaned.columns) == set(sample_well_data.columns), "❌ Column names have changed!"
