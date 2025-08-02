@@ -13,7 +13,6 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/yourusername/drilling-data-processor",
     
-    # ✅ شناسایی پکیج‌ها از مسیر `drilling_data_processor`
     packages=find_packages(where="drilling_data_processor"),
 
     classifiers=[
