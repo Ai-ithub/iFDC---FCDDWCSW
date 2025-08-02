@@ -15,14 +15,14 @@ class DrillingDataProcessor:
         config: Optional[Dict[str, Any]] = None
     ):
         """
-        هسته اصلی پردازش داده‌های حفاری با قابلیت‌های:
-        - بارگذاری خودکار داده‌ها
-        - پیکربندی پیشرفته
-        - سیستم لاگینگ یکپارچه
+        The core of the drilling data processing with capabilities:
+        - Automatic data loading
+        - Advanced configuration
+        - Integrated logging system
         
-        پارامترها:
-            file_path: مسیر فایل داده
-            config: دیکشنری پیکربندی (اختیاری)
+        Parameters:
+            file_path: Path to the data file
+            config: Configuration dictionary (optional)
         """
         self.file_path = Path(file_path)
         self.config = config or {}
@@ -36,24 +36,24 @@ class DrillingDataProcessor:
 
     @property
     def data(self) -> pd.DataFrame:
-        """دسترسی به داده‌ها با property"""
+        """Access to the data using property"""
         if self._data is None:
             self.load_data()
         return self._data
 
     def load_data(self) -> pd.DataFrame:
-        """بارگذاری و اعتبارسنجی داده‌ها"""
+        """Load and validate the data"""
         try:
             self.logger.log_processing_step(
                 f"Loading data from {self.file_path}", "info"
             )
             self._data = pd.read_parquet(self.file_path)
             
-            # بررسی مقدار `None` برای داده‌های اولیه
+            # Check for `None` values in the initial data
             if self._data is None or self._data.empty:
-                raise ValueError("❌ داده اولیه برای پردازش نامعتبر است!")
+                raise ValueError("❌ Initial data for processing is invalid!")
 
-            # اعتبارسنجی ساختار داده
+            # Validate data structure
             is_valid, msg = self.validator.validate_input_data(self._data)
             if not is_valid:
                 raise ValueError(f"Data validation failed: {msg}")
@@ -70,9 +70,9 @@ class DrillingDataProcessor:
             raise
 
     def run_pipeline(self) -> pd.DataFrame:
-        """اجرای کامل پایتلاین پردازش داده"""
+        """Run the complete data processing pipeline"""
         if self._data is None or self._data.empty:
-            raise ValueError("❌ خطا: داده‌ای برای پردازش موجود نیست!")
+            raise ValueError("❌ Error: No data available for processing!")
 
         steps = [
             ('Data Cleaning', self._clean_data),
@@ -96,9 +96,9 @@ class DrillingDataProcessor:
         return self._data
 
     def _clean_data(self):
-        """مرحله پاک‌سازی داده‌ها"""
+        """Data cleaning step"""
         if self._data is None or self._data.empty:
-            raise ValueError("❌ خطا: نمی‌توان داده‌های `None` را پاک‌سازی کرد!")
+            raise ValueError("❌ Error: Cannot clean `None` data!")
 
         self._data = self.cleaner.handle_missing_values(
             self._data,
@@ -107,9 +107,9 @@ class DrillingDataProcessor:
         self._data = self.cleaner.remove_duplicates(self._data)
 
     def _handle_outliers(self):
-        """مدیریت داده‌های پرت"""
+        """Handle outlier data"""
         if self._data is None or self._data.empty:
-            raise ValueError("❌ خطا: نمی‌توان داده‌های `None` را بررسی کرد!")
+            raise ValueError("❌ Error: Cannot process `None` data!")
 
         if self.config.get('remove_outliers', True):
             outlier_mask = self.outlier_detector.detect(
@@ -119,9 +119,9 @@ class DrillingDataProcessor:
             self._data = self._data[~outlier_mask]
 
     def _engineer_features(self):
-        """مهندسی ویژگی‌های جدید"""
+        """Feature engineering step"""
         if self._data is None or self._data.empty:
-            raise ValueError("❌ خطا: داده‌ای برای مهندسی ویژگی‌ها موجود نیست!")
+            raise ValueError("❌ Error: No data available for feature engineering!")
 
         self._data = self.feature_engineer.add_pt_ratio(self._data)
         self._data = self.feature_engineer.add_flow_efficiency(self._data)
@@ -129,9 +129,9 @@ class DrillingDataProcessor:
             self._data = self.feature_engineer.add_formation_metrics(self._data)
 
     def _check_quality(self):
-        """کنترل نهایی کیفیت داده‌ها"""
+        """Final data quality check"""
         if self._data is None or self._data.empty:
-            raise ValueError("❌ خطا: داده‌ای برای بررسی کیفیت موجود نیست!")
+            raise ValueError("❌ Error: No data available for quality check!")
 
         self.quality_report = self.quality_checker.generate_report(self._data)
         self.logger.log_processing_step(
