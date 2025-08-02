@@ -7,7 +7,7 @@ class QualityChecker:
         self.report = {}
 
     def generate_report(self, df) -> Dict[str, Any]:
-        """تولید گزارش جامع کیفیت داده‌ها"""
+        """Generate a comprehensive data quality report"""
         self._check_missing_values(df)
         self._check_value_ranges(df)
         self._check_data_distribution(df)
@@ -16,14 +16,14 @@ class QualityChecker:
         return self.report
 
     def _check_missing_values(self, df):
-        """بررسی مقادیر گم‌شده"""
+        """Check for missing values"""
         self.report['missing_values'] = {
             'total': df.isnull().sum().sum(),
             'by_column': df.isnull().sum().to_dict()
         }
 
     def _check_value_ranges(self, df):
-        """بررسی محدوده‌های منطقی برای مقادیر"""
+        """Check logical value ranges"""
         ranges = {
             'Temperature_C': (0, 400),
             'Pressure_psi': (0, 30000),
@@ -40,7 +40,7 @@ class QualityChecker:
 
     def _check_logical_inconsistencies(self, df: pd.DataFrame):
         """
-         چک کردن ترکیب ناسازگار منطقی بین ویژگی ها
+        Check for logically inconsistent combinations between features
         """
         if {'Fluid_Type', 'Formation_Type', 'Completion_Type'}.issubset(df.columns):
             suspicious_conditions = (
@@ -60,7 +60,7 @@ class QualityChecker:
 
     def _check_feature_inconsistencies(self, df):
         """
-        چک کردن ناسازگاری ترکیب ویژگی‌ها
+        Check for feature combination inconsistencies
         """
         conditions = [
             (df["Formation_Type"] == "Shale") & (df["Formation_Permeability"] > 50),
@@ -97,12 +97,10 @@ class QualityChecker:
         return df
     
     def _check_data_distribution(self, df):
-        """بررسی توزیع داده‌ها"""
+        """Check data distribution"""
         pass
 
     def save_report(self, file_path: str):
-        """ذخیره گزارش در فایل"""
+        """Save the report to a file"""
         with open(file_path, 'w') as f:
             json.dump(self.report, f, indent=4)
-     
-    
