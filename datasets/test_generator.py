@@ -6,7 +6,7 @@ from generator import calc_damage, determine_damage_type, phase_operation
 # -----------------------------
 def test_calc_damage_base_only():
     score = calc_damage(prob_base=0.1, clay=10, loss_fluid=0.5, fractures=0, api_loss=0.4)
-    assert score == 0.1  # فقط مقدار پایه
+    assert score == 0.1  
 
 def test_calc_damage_with_all_risks():
     score = calc_damage(prob_base=0.1, clay=35, loss_fluid=1.5, fractures=1, api_loss=0.8)
@@ -15,7 +15,7 @@ def test_calc_damage_with_all_risks():
 
 def test_calc_damage_capped_at_0_95():
     score = calc_damage(prob_base=0.8, clay=50, loss_fluid=2.0, fractures=1, api_loss=1.0)
-    assert score == 0.95  # نباید از 0.95 بیشتر شود
+    assert score == 0.95  
 
 # -----------------------------
 # Test for determine_damage_type
