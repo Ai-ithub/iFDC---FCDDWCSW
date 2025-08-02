@@ -22,27 +22,27 @@ class DataCleaner:
         custom_strategy: Dict[str, str] = None
     ) -> pd.DataFrame:
         """
-        مدیریت پیشرفته مقادیر گم‌شده با قابلیت‌های:
-        - ایمپوت عددی با روش‌های مختلف (`median`, `mean`, `knn`, `iterative`)
-        - ایمپوت `NaN` در ستون‌های متنی با رایج‌ترین مقدار (`mode`)
-        - ثبت تاریخچه تغییرات برای تحلیل پردازش‌ها
+        Advanced handling of missing values with the following capabilities:
+        - Numerical imputation with various methods (`median`, `mean`, `knn`, `iterative`)
+        - Impute `NaN` values in text columns with the most frequent value (`mode`)
+        - Track the history of changes for process analysis
         
-        پارامترها:
-            df: دیتافریم ورودی
-            strategy: استراتژی پیش‌فرض برای ستون‌های عددی
-            custom_strategy: دیکشنری مشخص کننده استراتژی برای ستون‌های خاص
+        Parameters:
+            df: The input DataFrame
+            strategy: Default strategy for numeric columns
+            custom_strategy: Dictionary specifying strategies for specific columns
             
-        مثال:
+        Example:
             cleaner.handle_missing_values(df, strategy='mean',
                                 custom_strategy={'Salinity_ppm': 'knn'})
         """
         if df is None or not isinstance(df, pd.DataFrame):
-            raise ValueError("❌ خطا: ورودی باید یک DataFrame معتبر باشد!")
+            raise ValueError("❌ Error: The input must be a valid DataFrame!")
 
         df = df.copy()
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         
-        # ✅ مدیریت ایمپوت سفارشی برای ستون‌های عددی
+        # ✅ Custom imputation for specific numeric columns
         if custom_strategy:
             for col, col_strategy in custom_strategy.items():
                 if col in numeric_cols:
@@ -54,9 +54,9 @@ class DataCleaner:
                         )
                         numeric_cols.remove(col)
                     else:
-                        raise ValueError(f"❌ خطا: استراتژی ایمپوت '{col_strategy}' معتبر نیست!")
+                        raise ValueError(f"❌ Error: Imputation strategy '{col_strategy}' is invalid!")
 
-        # ✅ مدیریت ایمپوت عمومی برای ستون‌های عددی باقی‌مانده
+        # ✅ General imputation for remaining numeric columns
         if numeric_cols:
             imputer = self.imputation_strategies.get(strategy)
             if imputer:
@@ -65,21 +65,21 @@ class DataCleaner:
                     f"Columns {numeric_cols} imputed with {strategy}"
                 )
             else:
-                raise ValueError(f"❌ خطا: استراتژی ایمپوت '{strategy}' معتبر نیست!")
+                raise ValueError(f"❌ Error: Imputation strategy '{strategy}' is invalid!")
 
-        # ✅ ایمپوت `NaN` در ستون‌های متنی با رایج‌ترین مقدار (`mode`)
+        # ✅ Impute `NaN` in text columns with the most frequent value (`mode`)
         categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
         for col in categorical_cols:
-            if df[col].isna().sum() > 0:  # فقط اگر مقدار `NaN` دارد
+            if df[col].isna().sum() > 0:  # Only if the column has `NaN` values
                 df[col].fillna(df[col].mode()[0], inplace=True)
                 self.imputation_history.append(f"Categorical column '{col}' imputed with mode")
             
         return df
 
     def remove_duplicates(self, df: pd.DataFrame) -> pd.DataFrame:
-        """حذف سطرهای تکراری با حفظ اولین occurrence"""
+        """Remove duplicate rows while keeping the first occurrence"""
         if df is None or not isinstance(df, pd.DataFrame):
-            raise ValueError("❌ خطا: ورودی باید یک DataFrame معتبر باشد!")
+            raise ValueError("❌ Error: The input must be a valid DataFrame!")
 
         initial_count = len(df)
         df = df.drop_duplicates()
