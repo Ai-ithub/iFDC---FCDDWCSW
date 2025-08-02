@@ -1,28 +1,34 @@
- راهنمای مشارکت در پروژه
-از اینکه می‌خواهید در پروژه مشارکت کنید، خوشحالیم! لطفاً برای مشارکت در این پروژه، مراحل زیر را دنبال کنید:
+# Contribution Guide
 
-مراحل مشارکت
-Fork کردن پروژه: ابتدا پروژه را Fork کنید و سپس یک شاخه (branch) جدید بسازید.
+We are happy that you want to contribute to the project! Please follow the steps below to contribute:
 
-ایجاد تغییرات: پس از انجام تغییرات موردنظر در پروژه، اطمینان حاصل کنید که تمامی کدها و ویژگی‌های جدید مطابق با استانداردهای کدنویسی پروژه نوشته شده‌اند.
+## Contribution Steps
 
-تست کردن تغییرات: حتماً کدهای خود را با استفاده از تست‌های مربوطه آزمایش کنید.
+1. **Fork the Project**: First, fork the project and then create a new branch.
+2. **Make Changes**: After making the necessary changes to the project, ensure that all the code and new features follow the project's coding standards.
+3. **Test Changes**: Make sure to test your changes using the appropriate tests.
+4. **Submit a Pull Request (PR)**: After applying the changes, create a Pull Request. In the PR, explain what your changes do.
 
-ارسال Pull Request (PR): پس از اعمال تغییرات، یک Pull Request ایجاد کنید. در PR توضیح دهید که تغییرات شما چه کارهایی انجام داده‌اند.
+## Coding Standards
 
-استانداردهای کدنویسی
-استفاده از پایتون ۳ و استفاده از PEP8 برای نوشتن کد.
-نام‌گذاری متغیرها و توابع باید خوانا و توصیفی باشد.
-از کامنت‌ها برای توضیح کدهای پیچیده استفاده کنید.
-کدها باید مدولار و قابل‌تست باشند.
-فرآیند بررسی کد
-پس از ارسال PR، کد توسط یک یا چند نفر از تیم بررسی خواهد شد.
-هر تغییر باید توسط حداقل یک توسعه‌دهنده دیگر بررسی و تأیید شود.
-استفاده از GitHub Actions
-برای اطمینان از کیفیت کد، از GitHub Actions برای انجام تست‌ها و بررسی کد استفاده خواهیم کرد. این موارد قبل از ادغام (Merge) در شاخه اصلی انجام می‌شوند.
+- Use Python 3 and follow PEP8 for writing code.
+- Variable and function names should be readable and descriptive.
+- Use comments to explain complex code.
+- Code should be modular and testable.
 
-تست‌ها و بررسی‌ها
-در هر PR، تست‌های خودکار اجرا خواهند شد.
-هر تغییر باید بدون خطا و با موفقیت تست‌ها را پشت سر بگذارد.
-نکات مهم
-اگر با مشکلی مواجه شدید یا سوالی دارید، می‌توانید آن را در بخش Issues مطرح کنید.
+## Code Review Process
+
+After submitting the PR, the code will be reviewed by one or more team members. Each change must be reviewed and approved by at least one other developer.
+
+## GitHub Actions for Code Quality
+
+We will use GitHub Actions to run tests and check the code before merging it into the main branch.
+
+## Tests and Reviews
+
+For each PR, automated tests will be run. Every change must pass the tests successfully without errors.
+
+## Important Notes
+
+- Please do not use Persian in your code, commits, or documentation. Only use English.
+- If you encounter any issues or have questions, you can raise them in the Issues section.
