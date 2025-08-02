@@ -9,7 +9,7 @@ class ProcessingLogger:
         self._setup_logger()
         
     def _setup_logger(self):
-        """تنظیمات اولیه سیستم ثبت رویدادها"""
+        """Initial setup for the logging system"""
         log_file = f"{self.log_dir}/drilling_processor_{datetime.now().strftime('%Y%m%d')}.log"
         
         self.logger = logging.getLogger('DrillingProcessor')
@@ -17,12 +17,12 @@ class ProcessingLogger:
         
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
         
-        # Handler برای فایل
+        # File handler
         fh = logging.FileHandler(log_file)
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(formatter)
         
-        # Handler برای کنسول
+        # Console handler
         ch = logging.StreamHandler()
         ch.setLevel(logging.INFO)
         ch.setFormatter(formatter)
@@ -31,7 +31,7 @@ class ProcessingLogger:
         self.logger.addHandler(ch)
     
     def log_processing_step(self, message: str, level: str = "info"):
-        """ثبت یک مرحله پردازش"""
+        """Log a processing step"""
         if level.lower() == "info":
             self.logger.info(message)
         elif level.lower() == "warning":
