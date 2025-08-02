@@ -4,7 +4,6 @@ import numpy as np
 
 @pytest.fixture
 def sample_well_data():
-    """دیتافریم نمونه برای تست‌های حفاری"""
     return pd.DataFrame({
         'Well_ID': ['WELL_001', 'WELL_002', 'WELL_003'],
         'Temperature_C': [80.5, 120.3, np.nan],
