@@ -1,45 +1,45 @@
-# 📊 شناسایی داده‌های پرت و تولید داده‌های پاک‌شده
+# 📊 Outlier Detection and Clean Data Generation
 
-این پروژه شامل شناسایی و حذف داده‌های پرت از مجموعه داده‌های ورودی است. داده‌های ورودی شامل **10 فایل parquet** هستند. پس از پردازش، برای هر فایل ورودی، دو خروجی تولید می‌شود:  
-1️⃣ فایل داده‌های پرت (Outliers)  
-2️⃣ فایل داده‌های پاک‌شده (Clean)  
-
----
-
-## 🗂️ ساختار ورودی و خروجی‌ها
-- **ورودی:** یک پوشه شامل 10 فایل parquet  
-- **خروجی‌ها:**  
-  - **10 فایل Outliers** (داده‌های پرت)  
-  - **10 فایل Clean** (داده‌های بدون داده پرت)  
-
-جمعاً **20 فایل خروجی تولید می‌شود.**
+This project involves identifying and removing outliers from the input dataset. The input data consists of **10 parquet files**. After processing, two outputs are generated for each input file:  
+1️⃣ Outliers file  
+2️⃣ Clean data file  
 
 ---
 
-## 🌐 لینک‌های خروجی
-- 📁 **فایل‌های Outliers:**  
-[مشاهده در Google Drive](https://drive.google.com/drive/folders/1qT4fQW5Axo0V7-gXk44aYTIKh7sae6jS?usp=sharing)
+## 🗂️ Input and Output Structure
+- **Input:** A folder containing 10 parquet files  
+- **Outputs:**  
+  - **10 Outliers files**  
+  - **10 Clean files**  
 
-- 📁 **فایل‌های Clean:**  
-[مشاهده در Google Drive](https://drive.google.com/drive/folders/1wCULRYz7YScCylSPgu0GbIAZlNjPqxw2?usp=sharing)
+A total of **20 output files** will be generated.
 
 ---
 
-## 📝 ویژگی‌ها
-- شناسایی داده‌های پرت بر اساس ستون‌های:
+## 🌐 Output Links
+- 📁 **Outliers files:**  
+[View on Google Drive](https://drive.google.com/drive/folders/1qT4fQW5Axo0V7-gXk44aYTIKh7sae6jS?usp=sharing)
+
+- 📁 **Clean files:**  
+[View on Google Drive](https://drive.google.com/drive/folders/1wCULRYz7YScCylSPgu0GbIAZlNjPqxw2?usp=sharing)
+
+---
+
+## 📝 Features
+- Outlier detection based on the following columns:
   - `temperature`
   - `pressure`
   - `permeability`
   - `flow_rate`
-- استفاده از روش‌های آماری z-score و IQR برای شناسایی داده‌های پرت.
-- ذخیره جداگانه داده‌های پرت و داده‌های پاک‌شده.
+- Statistical methods (z-score and IQR) used for outlier detection.
+- Separate storage of outliers and clean data.
 
 ---
 
-## 🚀 اجرای کلی:
-1️⃣ ورودی: 10 فایل parquet در یک پوشه  
-2️⃣ پردازش: شناسایی داده‌های پرت و تولید داده‌های Clean  
-3️⃣ خروجی: 20 فایل (10 outliers + 10 clean)  
-4️⃣ ذخیره خروجی‌ها در Google Drive (لینک‌های بالا).
+## 🚀 General Execution:
+1️⃣ Input: 10 parquet files in a folder  
+2️⃣ Processing: Outlier detection and clean data generation  
+3️⃣ Output: 20 files (10 outliers + 10 clean)  
+4️⃣ Store outputs in Google Drive (links above).
 
 ---
