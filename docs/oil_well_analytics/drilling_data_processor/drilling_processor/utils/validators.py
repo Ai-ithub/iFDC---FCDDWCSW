@@ -4,7 +4,7 @@ from typing import Tuple
 class DataValidator:
     @staticmethod
     def validate_input_data(df: pd.DataFrame) -> Tuple[bool, str]:
-        """اعتبارسنجی ساختار داده‌های ورودی"""
+        """Validate the structure of the input data"""
         required_columns = {
             'Temperature_C': 'float32',
             'Pressure_psi': 'float32',
