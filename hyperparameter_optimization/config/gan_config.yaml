@@ -1,0 +1,180 @@
+# GAN Hyperparameter Configuration
+# This file defines the search spaces for GAN hyperparameter optimization
+
+gan_hyperparameters:
+  # Generator hyperparameters
+  generator:
+    latent_dim:
+      type: "int"
+      min: 64
+      max: 256
+      step: 32
+      default: 100
+      description: "Dimension of the latent noise vector"
+    
+    hidden_dimensions:
+      layer_1:
+        type: "int"
+        min: 128
+        max: 512
+        step: 64
+        default: 256
+      layer_2:
+        type: "int"
+        min: 64
+        max: 256
+        step: 32
+        default: 128
+      layer_3:
+        type: "int"
+        min: 32
+        max: 128
+        step: 16
+        default: 64
+    
+    activation:
+      type: "categorical"
+      choices: ["leaky_relu", "relu", "elu", "swish"]
+      default: "leaky_relu"
+      description: "Activation function for generator layers"
+    
+    learning_rate:
+      type: "float"
+      min: 1e-5
+      max: 1e-2
+      log: true
+      default: 0.0002
+      description: "Learning rate for generator optimizer"
+    
+    beta1:
+      type: "float"
+      min: 0.5
+      max: 0.9
+      default: 0.5
+      description: "Beta1 parameter for Adam optimizer"
+    
+    beta2:
+      type: "float"
+      min: 0.9
+      max: 0.999
+      default: 0.999
+      description: "Beta2 parameter for Adam optimizer"
+  
+  # Discriminator hyperparameters
+  discriminator:
+    hidden_dimensions:
+      layer_1:
+        type: "int"
+        min: 32
+        max: 128
+        step: 16
+        default: 64
+      layer_2:
+        type: "int"
+        min: 64
+        max: 256
+        step: 32
+        default: 128
+      layer_3:
+        type: "int"
+        min: 128
+        max: 512
+        step: 64
+        default: 256
+    
+    activation:
+      type: "categorical"
+      choices: ["leaky_relu", "relu", "elu"]
+      default: "leaky_relu"
+      description: "Activation function for discriminator layers"
+    
+    dropout_rate:
+      type: "float"
+      min: 0.1
+      max: 0.5
+      default: 0.3
+      description: "Dropout rate for regularization"
+    
+    learning_rate:
+      type: "float"
+      min: 1e-5
+      max: 1e-2
+      log: true
+      default: 0.0002
+      description: "Learning rate for discriminator optimizer"
+    
+    beta1:
+      type: "float"
+      min: 0.5
+      max: 0.9
+      default: 0.5
+      description: "Beta1 parameter for Adam optimizer"
+    
+    beta2:
+      type: "float"
+      min: 0.9
+      max: 0.999
+      default: 0.999
+      description: "Beta2 parameter for Adam optimizer"
+  
+  # Training hyperparameters
+  training:
+    batch_size:
+      type: "categorical"
+      choices: [16, 32, 64, 128]
+      default: 32
+      description: "Batch size for training"
+    
+    epochs:
+      type: "int"
+      min: 50
+      max: 200
+      default: 100
+      description: "Number of training epochs"
+    
+    loss_function:
+      type: "categorical"
+      choices: ["bce", "wgan", "lsgan"]
+      default: "bce"
+      description: "Loss function for GAN training"
+    
+    label_smoothing:
+      type: "float"
+      min: 0.0
+      max: 0.3
+      default: 0.1
+      description: "Label smoothing factor"
+
+# Optimization settings
+optimization:
+  n_trials: 50
+  timeout: 3600  # seconds
+  direction: "minimize"
+  pruner: "median"
+  sampler: "tpe"
+  
+  # Early stopping criteria
+  early_stopping:
+    patience: 10
+    min_delta: 0.001
+  
+  # Parallel optimization
+  n_jobs: -1
+  
+  # Study storage (optional)
+  storage_url: null  # e.g., "sqlite:///gan_optimization.db"
+  study_name: "gan_hyperopt_study"
+
+# Model architecture constraints
+constraints:
+  # Ensure generator layers decrease in size
+  generator_layer_constraint: "decreasing"
+  
+  # Ensure discriminator layers increase in size
+  discriminator_layer_constraint: "increasing"
+  
+  # Memory constraints
+  max_model_size_mb: 500
+  
+  # Training constraints
+  max_training_time_minutes: 60
