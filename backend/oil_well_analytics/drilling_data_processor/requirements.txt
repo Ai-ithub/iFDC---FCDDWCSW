@@ -1,8 +1,0 @@
-pandas>=1.3.0
-numpy>=1.21.0
-scikit-learn>=1.0.0
-pyarrow>=6.0.0
-tqdm>=4.0.0
-matplotlib>=3.5.0  # برای ویژوالایزیشن
-seaborn>=0.11.0    # برای گزارش‌های گرافیکی
-python-dateutil>=2.8.2  # برای پردازش تاریخ‌ها

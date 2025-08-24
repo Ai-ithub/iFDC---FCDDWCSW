@@ -1,0 +1,397 @@
+# Machine Learning Models Hyperparameter Configuration
+# This file defines the search spaces for ML model hyperparameter optimization
+
+ml_hyperparameters:
+  # XGBoost hyperparameters
+  xgboost:
+    classifier:
+      n_estimators:
+        type: "int"
+        min: 50
+        max: 500
+        step: 25
+        default: 100
+        description: "Number of boosting rounds"
+      
+      max_depth:
+        type: "int"
+        min: 3
+        max: 10
+        default: 6
+        description: "Maximum depth of trees"
+      
+      learning_rate:
+        type: "float"
+        min: 0.01
+        max: 0.3
+        log: true
+        default: 0.1
+        description: "Boosting learning rate"
+      
+      subsample:
+        type: "float"
+        min: 0.6
+        max: 1.0
+        default: 1.0
+        description: "Subsample ratio of training instances"
+      
+      colsample_bytree:
+        type: "float"
+        min: 0.6
+        max: 1.0
+        default: 1.0
+        description: "Subsample ratio of columns when constructing each tree"
+      
+      reg_alpha:
+        type: "float"
+        min: 1e-8
+        max: 10.0
+        log: true
+        default: 0.0
+        description: "L1 regularization term on weights"
+      
+      reg_lambda:
+        type: "float"
+        min: 1e-8
+        max: 10.0
+        log: true
+        default: 1.0
+        description: "L2 regularization term on weights"
+      
+      min_child_weight:
+        type: "int"
+        min: 1
+        max: 10
+        default: 1
+        description: "Minimum sum of instance weight needed in a child"
+      
+      gamma:
+        type: "float"
+        min: 0.0
+        max: 5.0
+        default: 0.0
+        description: "Minimum loss reduction required to make a split"
+      
+      scale_pos_weight:
+        type: "float"
+        min: 0.1
+        max: 10.0
+        default: 1.0
+        description: "Balancing of positive and negative weights"
+    
+    regressor:
+      n_estimators:
+        type: "int"
+        min: 50
+        max: 500
+        step: 25
+        default: 100
+      
+      max_depth:
+        type: "int"
+        min: 3
+        max: 10
+        default: 6
+      
+      learning_rate:
+        type: "float"
+        min: 0.01
+        max: 0.3
+        log: true
+        default: 0.1
+      
+      subsample:
+        type: "float"
+        min: 0.6
+        max: 1.0
+        default: 1.0
+      
+      colsample_bytree:
+        type: "float"
+        min: 0.6
+        max: 1.0
+        default: 1.0
+      
+      reg_alpha:
+        type: "float"
+        min: 1e-8
+        max: 10.0
+        log: true
+        default: 0.0
+      
+      reg_lambda:
+        type: "float"
+        min: 1e-8
+        max: 10.0
+        log: true
+        default: 1.0
+      
+      min_child_weight:
+        type: "int"
+        min: 1
+        max: 10
+        default: 1
+      
+      gamma:
+        type: "float"
+        min: 0.0
+        max: 5.0
+        default: 0.0
+
+  # Random Forest hyperparameters
+  random_forest:
+    classifier:
+      n_estimators:
+        type: "int"
+        min: 50
+        max: 500
+        step: 25
+        default: 100
+        description: "Number of trees in the forest"
+      
+      max_depth:
+        type: "int"
+        min: 3
+        max: 20
+        default: null
+        description: "Maximum depth of trees"
+      
+      min_samples_split:
+        type: "int"
+        min: 2
+        max: 20
+        default: 2
+        description: "Minimum samples required to split an internal node"
+      
+      min_samples_leaf:
+        type: "int"
+        min: 1
+        max: 10
+        default: 1
+        description: "Minimum samples required to be at a leaf node"
+      
+      max_features:
+        type: "categorical"
+        choices: ["sqrt", "log2", null, 0.5, 0.7, 0.9]
+        default: "sqrt"
+        description: "Number of features to consider when looking for the best split"
+      
+      bootstrap:
+        type: "categorical"
+        choices: [true, false]
+        default: true
+        description: "Whether bootstrap samples are used when building trees"
+      
+      criterion:
+        type: "categorical"
+        choices: ["gini", "entropy"]
+        default: "gini"
+        description: "Function to measure the quality of a split"
+      
+      class_weight:
+        type: "categorical"
+        choices: [null, "balanced", "balanced_subsample"]
+        default: null
+        description: "Weights associated with classes"
+    
+    regressor:
+      n_estimators:
+        type: "int"
+        min: 50
+        max: 500
+        step: 25
+        default: 100
+      
+      max_depth:
+        type: "int"
+        min: 3
+        max: 20
+        default: null
+      
+      min_samples_split:
+        type: "int"
+        min: 2
+        max: 20
+        default: 2
+      
+      min_samples_leaf:
+        type: "int"
+        min: 1
+        max: 10
+        default: 1
+      
+      max_features:
+        type: "categorical"
+        choices: ["sqrt", "log2", null, 0.5, 0.7, 0.9]
+        default: "sqrt"
+      
+      bootstrap:
+        type: "categorical"
+        choices: [true, false]
+        default: true
+      
+      criterion:
+        type: "categorical"
+        choices: ["squared_error", "absolute_error", "friedman_mse"]
+        default: "squared_error"
+        description: "Function to measure the quality of a split"
+
+  # Support Vector Machine hyperparameters
+  svm:
+    classifier:
+      C:
+        type: "float"
+        min: 0.1
+        max: 100.0
+        log: true
+        default: 1.0
+        description: "Regularization parameter"
+      
+      kernel:
+        type: "categorical"
+        choices: ["linear", "poly", "rbf", "sigmoid"]
+        default: "rbf"
+        description: "Kernel type to be used in the algorithm"
+      
+      gamma:
+        type: "categorical"
+        choices: ["scale", "auto", 0.001, 0.01, 0.1, 1.0]
+        default: "scale"
+        description: "Kernel coefficient"
+      
+      degree:
+        type: "int"
+        min: 2
+        max: 5
+        default: 3
+        description: "Degree of the polynomial kernel function"
+    
+    regressor:
+      C:
+        type: "float"
+        min: 0.1
+        max: 100.0
+        log: true
+        default: 1.0
+      
+      kernel:
+        type: "categorical"
+        choices: ["linear", "poly", "rbf", "sigmoid"]
+        default: "rbf"
+      
+      gamma:
+        type: "categorical"
+        choices: ["scale", "auto", 0.001, 0.01, 0.1, 1.0]
+        default: "scale"
+      
+      epsilon:
+        type: "float"
+        min: 0.01
+        max: 1.0
+        default: 0.1
+        description: "Epsilon in the epsilon-SVR model"
+
+# Cross-validation settings
+cross_validation:
+  n_splits: 5
+  shuffle: true
+  random_state: 42
+  stratified: true  # for classification tasks
+
+# Optimization settings
+optimization:
+  n_trials: 100
+  timeout: 1800  # seconds (30 minutes)
+  direction: "maximize"  # for accuracy/f1, use "minimize" for loss
+  pruner: "median"
+  sampler: "tpe"
+  
+  # Multi-objective optimization
+  multi_objective:
+    enabled: false
+    objectives: ["accuracy", "training_time"]
+    weights: [0.8, 0.2]
+  
+  # Early stopping
+  early_stopping:
+    patience: 15
+    min_delta: 0.001
+  
+  # Parallel processing
+  n_jobs: -1
+  
+  # Study persistence
+  storage_url: null
+  study_name: "ml_hyperopt_study"
+
+# Evaluation metrics
+metrics:
+  classification:
+    primary: "f1_weighted"
+    secondary: ["accuracy", "precision_weighted", "recall_weighted", "roc_auc_ovr"]
+  
+  regression:
+    primary: "neg_mean_squared_error"
+    secondary: ["neg_mean_absolute_error", "r2", "neg_root_mean_squared_error"]
+
+# Data preprocessing
+preprocessing:
+  scaling:
+    enabled: true
+    method: "standard"  # "standard", "minmax", "robust"
+  
+  feature_selection:
+    enabled: false
+    method: "selectkbest"  # "selectkbest", "rfe", "lasso"
+    k_features: 10
+  
+  handle_imbalance:
+    enabled: false
+    method: "smote"  # "smote", "adasyn", "random_oversample"
+
+# Drilling-specific configurations
+drilling_data:
+  target_variables:
+    classification:
+      - "drilling_difficulty"
+      - "formation_type"
+      - "equipment_failure"
+    
+    regression:
+      - "rate_of_penetration"
+      - "drilling_cost"
+      - "mud_weight_optimal"
+  
+  feature_groups:
+    drilling_parameters:
+      - "depth"
+      - "pressure"
+      - "temperature"
+      - "mud_weight"
+      - "flow_rate"
+    
+    equipment_parameters:
+      - "torque"
+      - "rpm"
+      - "weight_on_bit"
+      - "hookload"
+    
+    geological_parameters:
+      - "formation_type"
+      - "porosity"
+      - "permeability"
+      - "lithology"
+
+# Model interpretability
+interpretability:
+  shap_analysis:
+    enabled: true
+    plot_types: ["summary", "waterfall", "force"]
+  
+  feature_importance:
+    enabled: true
+    top_n_features: 10
+  
+  partial_dependence:
+    enabled: true
+    features: ["depth", "pressure", "temperature"]
